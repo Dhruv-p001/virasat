@@ -1,0 +1,16 @@
+node_modules
+.turbo
+.next
+dist
+coverage
+*.tsbuildinfo
+.env
+.env.*
+!.env.example
+.vercel
+supabase/.temp
+supabase/.branches
+
+# Real elder recordings never go in git (consent + privacy). Keep them local or in a private bucket.
+packages/ai/eval/stt/data/
+packages/ai/eval/stt/results/

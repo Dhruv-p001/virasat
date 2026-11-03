@@ -1,0 +1,16 @@
+[
+  {
+    "id": "ba-thepla-01",
+    "audio": "ba-thepla-01.webm",
+    "mimeType": "audio/webm",
+    "reference": "પહેલા લોટમાં મેથી નાખો, પછી મુઠ્ઠી ભર બેસન...",
+    "language": "gu",
+    "speaker": { "ageBand": "80+", "region": "Saurashtra" },
+    "recording": { "device": "Redmi 9A, Chrome", "environment": "kitchen" },
+    "consent": {
+      "givenBy": "Speaker, verbally on recording and to organiser",
+      "recordedOn": "2026-11-10",
+      "allowsThirdPartyProcessing": true
+    }
+  }
+]

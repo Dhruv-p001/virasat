@@ -1,0 +1,10 @@
+pnpm-lock.yaml
+**/.next
+**/dist
+**/.turbo
+**/*.types.ts
+supabase/.temp
+supabase/.branches
+docs/brief.md
+CLAUDE.md
+packages/ui-tokens/theme.css

@@ -1,0 +1,18 @@
+{
+  "app": {
+    "name": "Virasat"
+  },
+  "contributor": {
+    "tapToRecord": "Tap to record",
+    "tapToStop": "Tap to stop",
+    "sending": "Sending…",
+    "sent": "Sent. Thank you."
+  },
+  "capture": {
+    "listening": "Listening to {{name}}'s recording",
+    "writing": "Writing the recipe"
+  },
+  "empty": {
+    "firstRecipe": "Record your first family recipe"
+  }
+}

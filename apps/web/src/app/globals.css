@@ -1,0 +1,7 @@
+@import "tailwindcss";
+@import "@virasat/ui-tokens/theme.css";
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
