@@ -76,7 +76,10 @@ test("an organiser makes a link and an elder records with no account", async ({
 
   const jobs = await jobsFor(personId);
   expect(jobs).toHaveLength(1);
-  expect(jobs[0]?.status).toBe("uploaded");
+  // Confirmed, then picked up by the pipeline: it may already be on its way.
+  expect(["uploaded", "transcribing", "structuring", "ready_for_review"]).toContain(
+    jobs[0]?.status,
+  );
   const { data: consents } = await adminClient()
     .from("consents")
     .select("kind, given_via")
@@ -191,6 +194,17 @@ test("revoked, used-up and made-up links show a friendly page", async ({
   page.once("dialog", (dialog) => void dialog.accept());
   await page.getByRole("button", { name: "Stop this link" }).click();
   await expect(page.getByRole("button", { name: "Stop this link" })).toHaveCount(0);
+  // The button also disappears while the action is pending, so wait for the revoke itself.
+  await expect
+    .poll(async () => {
+      const { data } = await adminClient()
+        .from("contributor_links")
+        .select("revoked_at")
+        .eq("id", only?.id ?? "")
+        .single();
+      return data?.revoked_at ?? null;
+    })
+    .not.toBeNull();
   const revoked = await openAsElder(browser, link, testInfo.project);
   await expect(
     revoked.page.getByRole("heading", { name: "This link doesn't work any more" }),

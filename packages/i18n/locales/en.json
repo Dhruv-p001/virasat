@@ -232,5 +232,21 @@
     "micDenied": "We couldn't use the microphone. Please allow it in your browser, then try again.",
     "unsupported": "This browser can't record. Please open the link in Chrome or Safari.",
     "retry": "Try again"
+  },
+  "captures": {
+    "title": "Waiting for you",
+    "seeAll": "See all",
+    "emptyTitle": "Nothing waiting",
+    "emptyBody": "When someone records a recipe, it will appear here.",
+    "voiceFrom": "{{name}}'s recording",
+    "pageFrom": "{{name}}'s handwritten page",
+    "someone": "A recording",
+    "uploaded": "Received. Getting ready…",
+    "transcribing": "Listening to {{name}}'s recording",
+    "structuring": "Writing the recipe",
+    "structuringPage": "Reading the handwritten page",
+    "ready": "Ready for you to review",
+    "failed": "Could not be turned into a recipe automatically",
+    "mockBanner": "Test mode: recipes here are made from a fixed sample, not from the recording. No AI service is being used."
   }
 }

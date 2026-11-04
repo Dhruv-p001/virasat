@@ -1,8 +1,10 @@
 import { canManageMembers, canWriteContent } from "@virasat/core";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AiModeBanner } from "@/components/ai-mode-banner.tsx";
+import { CaptureList } from "@/components/capture-list.tsx";
 import { Avatar, ButtonLink, EmptyState, PageShell, Section } from "@/components/ui.tsx";
-import { getVault, listPeople } from "@/lib/data.ts";
+import { getVault, listOpenCaptures, listPeople } from "@/lib/data.ts";
 import { getT } from "@/lib/i18n/server.ts";
 
 type Props = { params: Promise<{ familyId: string }> };
@@ -15,8 +17,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 export default async function VaultPage({ params }: Props) {
   const { familyId } = await params;
   const [vault, { t }] = await Promise.all([getVault(familyId), getT()]);
-  const people = await listPeople(familyId);
   const canWrite = canWriteContent(vault.role);
+  const [people, captures] = await Promise.all([
+    listPeople(familyId),
+    canWrite ? listOpenCaptures(familyId, 5) : Promise.resolve([]),
+  ]);
 
   return (
     <PageShell
@@ -30,6 +35,23 @@ export default async function VaultPage({ params }: Props) {
       }
     >
       <p className="-mt-6 text-muted">{t("vault.yourRole", { role: t(`roles.${vault.role}`) })}</p>
+
+      {captures.length > 0 && (
+        <Section
+          title={t("captures.title")}
+          action={
+            <Link
+              href={`/vault/${familyId}/captures`}
+              className="font-semibold text-accent underline underline-offset-4"
+            >
+              {t("captures.seeAll")}
+            </Link>
+          }
+        >
+          <AiModeBanner />
+          <CaptureList captures={captures} />
+        </Section>
+      )}
 
       <Section
         title={t("vault.people")}

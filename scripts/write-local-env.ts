@@ -22,6 +22,11 @@ const lines = [
   `SUPABASE_SERVICE_ROLE_KEY=${required("SERVICE_ROLE_KEY")}`,
   "NEXT_PUBLIC_SITE_URL=http://localhost:3000",
   "NEXT_PUBLIC_AUTH_PROVIDERS=",
+  "# Capture pipeline (ADR 0013). mock = fixture transcript and recipe, no API keys needed.",
+  "# Set to live, with ANTHROPIC_API_KEY and a speech-to-text key, to use the real providers.",
+  "AI_MODE=mock",
+  "# Send pipeline events to the local Inngest dev server (pnpm dev:inngest).",
+  "INNGEST_DEV=1",
   "",
 ];
 

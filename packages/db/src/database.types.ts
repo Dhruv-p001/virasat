@@ -432,6 +432,9 @@ isOneToOne: false
             "accept_invite":
 { Args: { "p_profile_id": string,"p_token": string }; Returns: string
                            },
+"advance_capture":
+{ Args: { "p_ai_output"?: Json,"p_detected_language"?: string,"p_error"?: string,"p_job_id": string,"p_provider_meta"?: Json,"p_to": Database["public"]['Enums']["capture_status"],"p_transcript"?: string }; Returns: Database["public"]['Enums']["capture_status"]
+                           },
 "begin_capture":
 { Args: { "p_actor"?: string,"p_byte_size": number,"p_consent_wording_version": string,"p_contributor_token"?: string,"p_mime_type": string,"p_person_id"?: string,"p_source": Database["public"]['Enums']["source_type"] }; Returns: {
               "job_id": string,"media_id": string,"storage_bucket": string,"storage_path": string
