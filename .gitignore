@@ -14,3 +14,5 @@ supabase/.branches
 # Real elder recordings never go in git (consent + privacy). Keep them local or in a private bucket.
 packages/ai/eval/stt/data/
 packages/ai/eval/stt/results/
+playwright-report
+test-results

@@ -1,7 +1,29 @@
 @import "tailwindcss";
 @import "@virasat/ui-tokens/theme.css";
 
+@theme inline {
+  --font-sans:
+    var(--font-sans-latin), var(--font-sans-gujarati), var(--font-sans-devanagari), system-ui,
+    sans-serif;
+  --font-serif:
+    var(--font-serif-latin), var(--font-serif-gujarati), var(--font-serif-devanagari), Georgia,
+    serif;
+}
+
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-serif);
+  text-wrap: balance;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-outline);
+  outline-offset: 2px;
 }

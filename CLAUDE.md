@@ -1,5 +1,26 @@
 # Family Recipe Vault: Build Brief for Claude Code
 
+> **Amendments. Read these before the brief.** Where they conflict, the ADRs in `docs/adr/` win over the text below. The original brief is kept unchanged in `docs/brief.md`.
+>
+> - **0002:** TypeScript 6, not 7, because typescript-eslint doesn't support 7 yet.
+> - **0003:** STT providers are evaluated before one is chosen.
+> - **0004:** v1 is web-first (installable PWA). Expo moves to v2.
+> - **0005:**
+>   - Built global-ready, launched to NRI families.
+>   - Warm, culture-neutral style. Right-to-left-ready layouts.
+>   - Sign-in by phone, email, Google and Apple.
+>   - Data hosted in India (Mumbai), with GDPR met through SCCs.
+>   - The original recipe changes only through a correction chain, never by editing it in place.
+>   - Cross-vault handover is in the schema now, with UI in v2.
+>   - Withdrawing consent hard-deletes the audio but keeps the text recipe.
+>   - Units are chosen per viewer.
+>   - Media belongs to the capture job until confirm.
+> - **0006:** RLS is tested with pgTAP (`pnpm db:test`). Every new table or policy ships with allowed and denied tests.
+> - **0007:** Sessions use `@supabase/ssr` with a `proxy.ts` (Next 16's name for middleware). Email sign-in sends a link and a code; local test phones use code `123456`.
+> - **0008:** Translations use i18next on the server and react-i18next in client components. Keys are type-checked.
+> - The full data model is in `docs/schema.md`. Soft deletes go through SQL functions (e.g. `remove_person()`), never direct `deleted_at` writes.
+> - Open questions live in `docs/open-decisions.md`.
+
 > Working name: **Virasat** (placeholder, rename freely)
 > Guiding principle: *If you do something, do it with perfection.*
 > In practice: build less, but build every piece completely. No half-finished features in production, no shortcuts in privacy or data integrity, no "we'll fix it later" on the data model.

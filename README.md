@@ -4,22 +4,36 @@ Family recipes, captured in the voices of the people who made them. `CLAUDE.md` 
 
 ## Setup
 
+Needs Node 24 and Docker.
+
 ```bash
 npm i -g pnpm@12.16.1      # once per machine
 pnpm install
-cp .env.example .env
+pnpm db:start              # local Supabase: database, auth, storage, test inbox
+pnpm env:local             # writes apps/web/.env.local from the running stack
+pnpm dev                   # http://localhost:3000
 ```
+
+### Signing in locally
+
+- **Email:** use `dhruv@example.test` (Shah family owner), `meena@example.test` (member) or `raj@example.test` (an unrelated family). Codes and links arrive in the local inbox at http://127.0.0.1:54324.
+- **Phone:** use `+1 555 555 0100` or `+1 555 555 0101`. The code is always `123456` and no SMS is sent.
+- **New accounts:** any new email or test phone number creates an account and starts onboarding.
 
 ## Everyday commands
 
 | Command                                                  | What it does                                                                    |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------- |
 | `pnpm dev`                                               | Run the web app                                                                 |
-| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | What CI runs                                                                    |
+| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | Checks CI runs                                                                  |
+| `pnpm db:test`                                           | pgTAP: vault isolation and every RLS policy, allowed and denied                 |
+| `pnpm e2e`                                               | Playwright end-to-end tests on phone and desktop (needs the local stack)        |
 | `pnpm format`                                            | Prettier                                                                        |
 | `pnpm db:start` / `pnpm db:reset`                        | Local Supabase (needs Docker). Reset applies migrations and `supabase/seed.sql` |
 | `pnpm db:types`                                          | Regenerate `packages/db/src/database.types.ts` from the local database          |
 | `pnpm eval:stt`                                          | Speech-to-text provider comparison (see below)                                  |
+
+The `/style` page shows every design token and pattern in light and dark mode (development only).
 
 ## Speech-to-text evaluation (Phase 0)
 
@@ -32,15 +46,14 @@ cp .env.example .env
 ## Layout
 
 ```
-apps/web            Next.js: contributor links, share pages, dashboard, API routes
-packages/core       Domain types, Zod schemas, permission helpers, tokens
+apps/web            Next.js: sign-in, vaults, people, invites, settings (and later capture, share pages)
+packages/core       Domain types, Zod schemas (recipes and forms), permission helpers, tokens
 packages/ai         STT providers, error-rate metrics, eval harness
 packages/db         Generated Supabase types
 packages/ui-tokens  Colours, type scale, sizing → generated Tailwind theme
 packages/i18n       en, hi, gu strings
-supabase/           Migrations (with RLS) and seed
-docs/adr/           Architecture decision records
-docs/open-decisions.md
+supabase/           Migrations (with RLS), pgTAP tests, seed, email templates
+docs/               Schema design, ADRs, open decisions
 ```
 
-`apps/mobile` and `jobs/` arrive in later phases (see ADR 0004 and Phase 2).
+`apps/mobile` arrives in v2 (ADR 0004), and `jobs/` in Phase 2.

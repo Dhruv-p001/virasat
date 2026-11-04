@@ -26,9 +26,13 @@ jobs:
       - run: pnpm typecheck
       - run: pnpm test
       - run: pnpm build
+        env:
+          # Build-time placeholders only; pages render per request against the real project.
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-build-placeholder-anon-key
 
   migrations:
-    name: Migrations apply cleanly and pass lint
+    name: Migrations, schema lint, RLS tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -42,3 +46,32 @@ jobs:
       - run: pnpm exec supabase db start
       - run: pnpm exec supabase db reset --local
       - run: pnpm exec supabase db lint --local --level warning --fail-on warning
+      # pgTAP: vault isolation and every RLS policy, allowed and denied (brief section 9).
+      - run: pnpm exec supabase test db --local
+      - name: Generated database types match the schema
+        run: pnpm exec supabase gen types typescript --local | diff - packages/db/src/database.types.ts
+
+  e2e:
+    name: End-to-end (Playwright, phone and desktop)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v5
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      # Auth, REST, storage and the test inbox; the rest of the stack isn't needed.
+      - run: pnpm exec supabase start -x studio,imgproxy,edge-runtime,logflare,vector,realtime,supavisor
+      - run: pnpm env:local
+      - run: pnpm --filter @virasat/web exec playwright install --with-deps chromium
+      - run: pnpm e2e
+        env:
+          CI: "true"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
