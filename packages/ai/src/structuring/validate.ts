@@ -5,6 +5,9 @@ import { normalizeTranscript } from "../metrics/error-rate.ts";
 /** Metric units a suggested quantity may use. "piece" is for countable items ("2 onions"). */
 export const METRIC_UNITS = ["g", "kg", "ml", "l", "piece"] as const;
 
+/** A step is flagged when fewer than this share of its words appear in the source. */
+export const STEP_MIN_WORD_OVERLAP = 0.5;
+
 export type ValidationOutcome =
   { ok: true; recipe: StructuredRecipe; autoFlagged: string[] } | { ok: false; issues: string[] };
 
@@ -13,11 +16,29 @@ export function describeIssues(error: z.ZodError): string[] {
   return error.issues.map((issue) => `${issue.path.join(".") || "(root)"}: ${issue.message}`);
 }
 
+/** Normalised words. Matching on whole words keeps "namak" from matching inside "namakeen". */
+function words(text: string): string[] {
+  const normalized = normalizeTranscript(text);
+  return normalized === "" ? [] : normalized.split(" ");
+}
+
+/** True when `phrase` appears in `source` as a run of whole words. */
+function containsPhrase(source: string[], phrase: string[]): boolean {
+  if (phrase.length === 0) return false;
+  for (let start = 0; start + phrase.length <= source.length; start++) {
+    if (phrase.every((word, offset) => source[start + offset] === word)) return true;
+  }
+  return false;
+}
+
 /**
  * Checks a recipe against the Zod contract plus the rules a schema cannot express:
  *  - suggested units are metric (retried when broken);
  *  - uncertain_fields point at real parts of the recipe (stale pointers are dropped);
- *  - each ingredient's original_text appears verbatim in the source text (flagged for review when not).
+ *  - each ingredient's original_text appears in the source as whole words, and each step shares
+ *    most of its words with the source (flagged for review when not, never rejected).
+ * The invention checks compare against `sourceText`. For handwriting that is the model's own
+ * reading of the page, so the checks only catch drift from that reading, not misreadings.
  */
 export function validateRecipe(raw: unknown, sourceText: string): ValidationOutcome {
   const parsed = StructuredRecipeSchema.safeParse(raw);
@@ -36,13 +57,25 @@ export function validateRecipe(raw: unknown, sourceText: string): ValidationOutc
   const recipe: StructuredRecipe = { ...parsed.data, ingredients };
   const uncertain = new Set(recipe.uncertain_fields.filter((p) => resolvePointer(recipe, p)));
 
-  const source = normalizeTranscript(sourceText);
+  const source = words(sourceText);
+  const sourceWords = new Set(source);
   const autoFlagged: string[] = [];
-  recipe.ingredients.forEach((ingredient, index) => {
-    if (source.includes(normalizeTranscript(ingredient.original_text))) return;
-    const pointer = `/ingredients/${index}/original_text`;
+  const flag = (pointer: string) => {
     if (!uncertain.has(pointer)) autoFlagged.push(pointer);
     uncertain.add(pointer);
+  };
+
+  recipe.ingredients.forEach((ingredient, index) => {
+    if (!containsPhrase(source, words(ingredient.original_text))) {
+      flag(`/ingredients/${index}/original_text`);
+    }
+  });
+  recipe.steps.forEach((step, index) => {
+    const stepWords = words(step.text);
+    const shared = stepWords.filter((word) => sourceWords.has(word)).length;
+    if (stepWords.length === 0 || shared / stepWords.length < STEP_MIN_WORD_OVERLAP) {
+      flag(`/steps/${index}/text`);
+    }
   });
 
   return { ok: true, recipe: { ...recipe, uncertain_fields: [...uncertain] }, autoFlagged };

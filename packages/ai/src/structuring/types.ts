@@ -47,7 +47,16 @@ export interface RecipeDraft {
   promptVersion: string;
 }
 
-export type ManualEntryReason = "empty_input" | "invalid_output" | "provider_error";
+/**
+ * Why the AI gave up. Only `invalid_output` is retried. The others cannot improve on a second try:
+ * - `empty_input`: nothing to read.
+ * - `invalid_input`: the images failed pre-checks, so the API was never called.
+ * - `truncated`: the answer hit the token limit, reasoning included.
+ * - `refused`: a safety classifier declined. The category is in `issues`.
+ * - `provider_error`: the API failed after the SDK's own retries.
+ */
+export type ManualEntryReason =
+  "empty_input" | "invalid_input" | "invalid_output" | "truncated" | "refused" | "provider_error";
 
 /** The AI could not produce a trustworthy recipe. The review screen offers manual entry, prefilled with `transcript`. */
 export interface NeedsManualEntry {

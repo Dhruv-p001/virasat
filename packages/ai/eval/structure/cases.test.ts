@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ClaudeRecipeStructurer } from "../../src/structuring/claude/structurer.ts";
 import { ScriptedModelClient } from "../../src/structuring/testing.ts";
-import { StructureCaseSchema, loadCases } from "./cases.ts";
+import { StructureCaseSchema, casesForProvider, loadCases, type LoadedCase } from "./cases.ts";
 import { runStructureEval, summarise, toMarkdown } from "./runner.ts";
 
 describe("structuring eval cases", () => {
@@ -56,5 +56,32 @@ describe("StructureCaseSchema", () => {
     if (!first) throw new Error("no cases");
     const word = first.expected.ingredients[0]?.original_text ?? "x";
     expect(StructureCaseSchema.safeParse({ ...first, forbidden: [word] }).success).toBe(false);
+  });
+});
+
+describe("casesForProvider", () => {
+  const synthetic = loadCases().filter((c) => c.origin === "synthetic");
+  const [first] = synthetic;
+  if (!first) throw new Error("no synthetic cases");
+  const real: LoadedCase = { ...first, id: "real-family-transcript", origin: "private" };
+  const all = [...synthetic, real];
+
+  it("loads committed cases as synthetic", () => {
+    expect(synthetic.length).toBeGreaterThanOrEqual(6);
+  });
+
+  it("withholds real transcripts from Gemini (free tier, ADR 0011)", () => {
+    const { allowed, withheld } = casesForProvider(all, "gemini");
+    expect(allowed).toEqual(synthetic);
+    expect(withheld.map((c) => c.id)).toEqual(["real-family-transcript"]);
+  });
+
+  it("withholds them from any provider it does not know", () => {
+    expect(casesForProvider(all, "someone-else").withheld).toHaveLength(1);
+  });
+
+  it("sends everything to Claude and to the mock", () => {
+    expect(casesForProvider(all, "claude")).toEqual({ allowed: all, withheld: [] });
+    expect(casesForProvider(all, "mock")).toEqual({ allowed: all, withheld: [] });
   });
 });

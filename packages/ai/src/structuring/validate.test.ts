@@ -76,6 +76,7 @@ describe("validateRecipe", () => {
   it("matches original_text ignoring case, punctuation and Indic digits", () => {
     const recipe = sampleRecipe({ uncertain_fields: [] });
     recipe.ingredients.length = 1;
+    recipe.steps = [];
     firstIngredient(recipe).original_text = "2 મુઠ્ઠી બેસન";
     const outcome = validateRecipe(recipe, "૨ મુઠ્ઠી બેસન, થોડું મીઠું।");
     expect(outcome.ok && outcome.autoFlagged).toEqual([]);
@@ -98,5 +99,55 @@ describe("resolvePointer", () => {
     ["/e", false],
   ])("%s -> %s", (pointer, expected) => {
     expect(resolvePointer(doc, pointer)).toBe(expected);
+  });
+});
+
+describe("invention checks", () => {
+  it("matches original_text on whole words, not substrings", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    const second = recipe.ingredients[1];
+    if (!second) throw new Error("fixture");
+    second.original_text = "mith";
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual(["/ingredients/1/original_text"]);
+  });
+
+  it("does not match across a missing word", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    firstIngredient(recipe).original_text = "mutthi besan";
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual(["/ingredients/0/original_text"]);
+  });
+
+  it("flags a step whose words mostly do not appear in the source", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    recipe.steps = [
+      { text: "besan ne tel ma sekvo" },
+      { text: "garnish with coriander and serve hot" },
+    ];
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual(["/steps/1/text"]);
+    expect(outcome.ok && outcome.recipe.uncertain_fields).toEqual(["/steps/1/text"]);
+  });
+
+  it("accepts a lightly tidied step that keeps most of the speaker's words", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    recipe.steps = [{ text: "Besan ne tel ma sekvo, pachi mithu nakho." }];
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual([]);
+  });
+
+  it("flags a step translated into another script", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    recipe.steps = [{ text: "બેસન ને તેલમાં શેકવું" }];
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual(["/steps/0/text"]);
+  });
+
+  it("flags an ingredient or step that is only punctuation", () => {
+    const recipe = sampleRecipe({ uncertain_fields: [] });
+    recipe.steps = [{ text: "..." }];
+    const outcome = validateRecipe(recipe, SAMPLE_TRANSCRIPT);
+    expect(outcome.ok && outcome.autoFlagged).toEqual(["/steps/0/text"]);
   });
 });

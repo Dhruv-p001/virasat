@@ -1,3 +1,9 @@
 packages:
   - apps/*
   - packages/*
+# Install scripts deliberately not run (ADR 0011). @google/genai only has docs and test tooling,
+# and protobufjs an optional CLI helper. Neither is needed at runtime. Without an explicit
+# decision, pnpm 12 fails `install --frozen-lockfile` with ERR_PNPM_IGNORED_BUILDS.
+allowBuilds:
+  "@google/genai": false
+  protobufjs: false
