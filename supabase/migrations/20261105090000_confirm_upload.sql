@@ -60,7 +60,7 @@ begin
   end if;
 
   update public.capture_jobs set status = 'uploaded' where id = v_job.id;
-  return 'uploaded';
+  return 'uploaded'::public.capture_status;
 end;
 $$;
 
