@@ -22,16 +22,17 @@ pnpm dev                   # http://localhost:3000
 
 ## Everyday commands
 
-| Command                                                  | What it does                                                                    |
-| -------------------------------------------------------- | ------------------------------------------------------------------------------- |
-| `pnpm dev`                                               | Run the web app                                                                 |
-| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | Checks CI runs                                                                  |
-| `pnpm db:test`                                           | pgTAP: vault isolation and every RLS policy, allowed and denied                 |
-| `pnpm e2e`                                               | Playwright end-to-end tests on phone and desktop (needs the local stack)        |
-| `pnpm format`                                            | Prettier                                                                        |
-| `pnpm db:start` / `pnpm db:reset`                        | Local Supabase (needs Docker). Reset applies migrations and `supabase/seed.sql` |
-| `pnpm db:types`                                          | Regenerate `packages/db/src/database.types.ts` from the local database          |
-| `pnpm eval:stt`                                          | Speech-to-text provider comparison (see below)                                  |
+| Command                                                  | What it does                                                                        |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| `pnpm dev`                                               | Run the web app                                                                     |
+| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` | Checks CI runs                                                                      |
+| `pnpm db:test`                                           | pgTAP: vault isolation and every RLS policy, allowed and denied                     |
+| `pnpm e2e`                                               | Playwright end-to-end tests on phone and desktop (needs the local stack)            |
+| `pnpm format`                                            | Prettier                                                                            |
+| `pnpm db:start` / `pnpm db:reset`                        | Local Supabase (needs Docker). Reset applies migrations and `supabase/seed.sql`     |
+| `pnpm db:types`                                          | Regenerate `packages/db/src/database.types.ts` from the local database              |
+| `pnpm eval:stt`                                          | Speech-to-text provider comparison (see below)                                      |
+| `pnpm eval:structure`                                    | Transcript to recipe eval. `--mock` needs no API key, otherwise `ANTHROPIC_API_KEY` |
 
 The `/style` page shows every design token and pattern in light and dark mode (development only).
 

@@ -1,0 +1,88 @@
+{
+  "id": "en-lemon-rice",
+  "description": "English with exact measures; a vague handful of peanuts; a memory at the end",
+  "speaker": { "name": "Amma", "relation": "Mother" },
+  "language": "en",
+  "transcript": "My mother's lemon rice. Take two cups of cooked rice, cold. Heat two tablespoons of oil, add mustard seeds, a few curry leaves, and a handful of peanuts. Add turmeric, half a teaspoon. Squeeze in one lemon and salt to taste, then mix with the rice. She always made this on the day we travelled.",
+  "expected": {
+    "title": "Lemon rice",
+    "servings": null,
+    "ingredients": [
+      {
+        "original_text": "two cups of cooked rice",
+        "name": "cooked rice",
+        "suggested_quantity": 300,
+        "suggested_unit": "g",
+        "confidence": 0.7,
+        "note": "cold"
+      },
+      {
+        "original_text": "two tablespoons of oil",
+        "name": "oil",
+        "suggested_quantity": 30,
+        "suggested_unit": "ml",
+        "confidence": 0.9,
+        "note": null
+      },
+      {
+        "original_text": "mustard seeds",
+        "name": "mustard seeds",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "a few curry leaves",
+        "name": "curry leaves",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "a handful of peanuts",
+        "name": "peanuts",
+        "suggested_quantity": 40,
+        "suggested_unit": "g",
+        "confidence": 0.3,
+        "note": null
+      },
+      {
+        "original_text": "turmeric, half a teaspoon",
+        "name": "turmeric",
+        "suggested_quantity": 1.5,
+        "suggested_unit": "g",
+        "confidence": 0.8,
+        "note": null
+      },
+      {
+        "original_text": "one lemon",
+        "name": "lemon",
+        "suggested_quantity": 1,
+        "suggested_unit": "piece",
+        "confidence": 0.95,
+        "note": null
+      },
+      {
+        "original_text": "salt to taste",
+        "name": "salt",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      }
+    ],
+    "steps": [
+      { "text": "Take the cooked rice, cold." },
+      { "text": "Heat the oil, add mustard seeds, curry leaves and peanuts." },
+      { "text": "Add turmeric." },
+      { "text": "Squeeze in the lemon and add salt to taste, then mix with the rice." }
+    ],
+    "tips": [],
+    "story": "She always made this on the day we travelled.",
+    "language": "en",
+    "uncertain_fields": ["/ingredients/4/suggested_quantity"]
+  },
+  "forbidden": ["ginger", "chilli", "cumin", "sugar"]
+}

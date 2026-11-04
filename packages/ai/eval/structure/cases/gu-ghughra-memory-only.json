@@ -1,0 +1,18 @@
+{
+  "id": "gu-ghughra-memory-only",
+  "description": "A memory with no recipe in it: ingredients and steps stay empty and nothing is invented",
+  "speaker": { "name": "Ba", "relation": "Grandmother" },
+  "language": "gu",
+  "transcript": "Ba nu to shu kahevu, bhai. Diwali ma ghare ghughra banavti, aakhu ghar suvasthi bharay jatu. Recipe to kyare lakhi j nathi.",
+  "expected": {
+    "title": "ghughra",
+    "servings": null,
+    "ingredients": [],
+    "steps": [],
+    "tips": [],
+    "story": "Diwali ma ghare ghughra banavti, aakhu ghar suvasthi bharay jatu.",
+    "language": "gu",
+    "uncertain_fields": []
+  },
+  "forbidden": ["mawa", "maida", "sugar", "khand", "coconut", "elaichi"]
+}

@@ -1,0 +1,81 @@
+{
+  "id": "hi-kadhi",
+  "description": "Hindi in Devanagari, spoon and bowl measures, andaaz salt and turmeric, a Sunday memory",
+  "speaker": { "name": "Nani", "relation": "Maternal grandmother" },
+  "language": "hi",
+  "transcript": "कढ़ी बनाने के लिए एक कटोरी दही लेती हूँ, उसमें दो चम्मच बेसन घोल देती हूँ। नमक और हल्दी अंदाज़ से डालती हूँ। फिर धीमी आँच पर पकाती हूँ, चलाते रहना है नहीं तो फट जाएगी। ऊपर से घी में जीरा और लाल मिर्च का तड़का लगाती हूँ। हमारे घर में ये कढ़ी हर रविवार बनती थी।",
+  "expected": {
+    "title": "कढ़ी",
+    "servings": null,
+    "ingredients": [
+      {
+        "original_text": "एक कटोरी दही",
+        "name": "दही",
+        "suggested_quantity": 150,
+        "suggested_unit": "g",
+        "confidence": 0.4,
+        "note": null
+      },
+      {
+        "original_text": "दो चम्मच बेसन",
+        "name": "बेसन",
+        "suggested_quantity": 20,
+        "suggested_unit": "g",
+        "confidence": 0.4,
+        "note": null
+      },
+      {
+        "original_text": "नमक",
+        "name": "नमक",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": "अंदाज़ से"
+      },
+      {
+        "original_text": "हल्दी अंदाज़ से",
+        "name": "हल्दी",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "घी",
+        "name": "घी",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "जीरा",
+        "name": "जीरा",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "लाल मिर्च",
+        "name": "लाल मिर्च",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      }
+    ],
+    "steps": [
+      { "text": "एक कटोरी दही में दो चम्मच बेसन घोल देना।" },
+      { "text": "नमक और हल्दी अंदाज़ से डालना।" },
+      { "text": "धीमी आँच पर पकाना।" },
+      { "text": "चलाते रहना है, नहीं तो फट जाएगी।" },
+      { "text": "ऊपर से घी में जीरा और लाल मिर्च का तड़का लगाना।" }
+    ],
+    "tips": ["चलाते रहना है नहीं तो फट जाएगी।"],
+    "story": "हमारे घर में ये कढ़ी हर रविवार बनती थी।",
+    "language": "hi",
+    "uncertain_fields": ["/ingredients/0/suggested_quantity", "/ingredients/1/suggested_quantity"]
+  },
+  "forbidden": ["पकौड़े", "हींग", "धनिया", "curry leaves"]
+}

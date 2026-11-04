@@ -21,7 +21,8 @@
     "db:test": "supabase test db",
     "env:local": "node scripts/write-local-env.ts",
     "e2e": "pnpm --filter @virasat/web e2e",
-    "eval:stt": "pnpm --filter @virasat/ai eval:stt"
+    "eval:stt": "pnpm --filter @virasat/ai eval:stt",
+    "eval:structure": "pnpm --filter @virasat/ai eval:structure"
   },
   "devDependencies": {
     "@eslint/js": "9.39.5",

@@ -1,0 +1,73 @@
+{
+  "id": "gu-khichdi-unclear",
+  "description": "Romanised Gujarati with a forgotten quantity and an unrecognised word: both must be flagged, not guessed",
+  "speaker": { "name": "Ba", "relation": "Grandmother" },
+  "language": "gu",
+  "transcript": "khichdi mate chokha ane mag ni dal sarkha bhaag ma levi. pani ketlu nakhvu e mane barobar yaad nathi. pachi haldar ane mithu ane [unclear] nakhvu. upar thi ghee. cooker ma chaar seeti vagadvi.",
+  "expected": {
+    "title": "khichdi",
+    "servings": null,
+    "ingredients": [
+      {
+        "original_text": "chokha",
+        "name": "chokha",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "mag ni dal sarkha bhaag ma",
+        "name": "mag ni dal",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": "equal parts with the rice"
+      },
+      {
+        "original_text": "pani",
+        "name": "pani",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": "the speaker does not remember how much"
+      },
+      {
+        "original_text": "haldar",
+        "name": "haldar",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "mithu",
+        "name": "mithu",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "ghee",
+        "name": "ghee",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      }
+    ],
+    "steps": [
+      { "text": "chokha ane mag ni dal sarkha bhaag ma levi." },
+      { "text": "pani nakhvu." },
+      { "text": "haldar ane mithu ane [unclear] nakhvu." },
+      { "text": "upar thi ghee." },
+      { "text": "cooker ma chaar seeti vagadvi." }
+    ],
+    "tips": [],
+    "story": null,
+    "language": "gu",
+    "uncertain_fields": ["/ingredients/2", "/steps/2/text"]
+  },
+  "forbidden": ["jeera", "onion", "lasan", "garlic"]
+}
