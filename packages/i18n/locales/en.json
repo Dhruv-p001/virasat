@@ -184,5 +184,16 @@
   },
   "empty": {
     "firstRecipe": "Record your first family recipe"
+  },
+  "consent": {
+    "title": "Before you record",
+    "elderFamily": "This recording is for your family. Only people in your family's vault can listen to it.",
+    "elderComputer": "A computer listens to it and writes your recipe down. The companies that do this don't keep your voice or use it for anything else.",
+    "elderKeep": "Your voice is kept safely in India. You can ask for it to be deleted at any time.",
+    "agree": "I agree. Start recording",
+    "organiserCheckbox": "{{name}} knows this recording is for the family, and agrees to it being recorded, written down and kept.",
+    "organiserNote": "If {{name}} changes their mind, you can delete the recording at any time.",
+    "scanNote": "A computer reads this page to type up the recipe. The original photo stays in your family vault.",
+    "limitReached": "That's 10 minutes, the most one recording can hold. Everything you said has been kept."
   }
 }

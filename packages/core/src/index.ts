@@ -5,3 +5,4 @@ export * from "./tokens.ts";
 export * from "./paths.ts";
 export * from "./forms.ts";
 export * from "./countries.ts";
+export * from "./capture.ts";
