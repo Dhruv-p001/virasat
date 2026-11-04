@@ -45,6 +45,20 @@ Rules:
   - `recipes.current_version_id` moves to it. Older versions stay readable in history.
   - Forks (`kind = fork`) are personal versions: they never move `current_version_id`, and they belong to their author.
 
+**As built** (migration `capture_and_recipes`, ADR 0010):
+
+- **Status.** `capture_jobs.status` starts at `awaiting_upload`, which comes before `uploaded`.
+- **Recipes on `media`.** The table also has `family_id`, `storage_bucket`, `mime_type` and `byte_size`. Recipes and versions carry `family_id` for RLS.
+- **Server functions are the only writers.** Each is called with the service role after the session is checked:
+  - `begin_capture()` records consent, creates the job and registers the upload path.
+  - `confirm_capture()` creates the recipe and its original version and attaches the media.
+  - `publish_correction()` is for owners and admins.
+  - `create_contributor_link()`, `revoke_contributor_link()` and `contributor_link_info()` manage elder recording links.
+- **Read rules:**
+  - Unreviewed captures and their media are visible to owners, admins and members only.
+  - A confirmed recipe's media follows the recipe.
+  - Private recipes are visible to their creator only.
+
 ## Phase 3: handover
 
 | Table       | Purpose                     | Key columns                                                                                                                                                                                                                                                |
