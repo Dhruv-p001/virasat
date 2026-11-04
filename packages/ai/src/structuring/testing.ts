@@ -36,9 +36,21 @@ export function sampleRecipe(overrides: Partial<StructuredRecipe> = {}): Structu
 export const SAMPLE_TRANSCRIPT =
   "ek mutthi bhar besan lo, thodu mithu nakho, besan ne tel ma sekvo";
 
+/** A scripted turn where the model stopped for a reason other than finishing its answer. */
+export class ScriptedStop {
+  readonly stopReason: "max_tokens" | "refusal";
+  readonly refusalCategory: string | null;
+
+  constructor(stopReason: "max_tokens" | "refusal", refusalCategory: string | null = null) {
+    this.stopReason = stopReason;
+    this.refusalCategory = refusalCategory;
+  }
+}
+
 /**
- * Fake model: answers each call with the next scripted tool input (an Error is thrown instead).
- * Records every request so tests can inspect prompts. Never touches the network.
+ * Fake model: answers each call with the next scripted answer. An Error is thrown instead, and a
+ * ScriptedStop ends the turn early. Records every request so tests can inspect prompts. Never
+ * touches the network.
  */
 export class ScriptedModelClient implements ModelClient {
   readonly model = "fake-model";
@@ -53,6 +65,13 @@ export class ScriptedModelClient implements ModelClient {
     this.requests.push(request);
     const next = this.#script.shift();
     if (next instanceof Error) return Promise.reject(next);
-    return Promise.resolve({ toolInput: next, inputTokens: 100, outputTokens: 50 });
+    const stop = next instanceof ScriptedStop ? next : null;
+    return Promise.resolve({
+      output: stop ? undefined : next,
+      stopReason: stop?.stopReason ?? "end_turn",
+      refusalCategory: stop?.refusalCategory ?? null,
+      inputTokens: 100,
+      outputTokens: 50,
+    });
   }
 }

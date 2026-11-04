@@ -5,13 +5,17 @@
  *                                         score must be perfect. Checks the harness, not the model.
  *   pnpm eval:structure                   real Claude calls, needs ANTHROPIC_API_KEY in .env
  *   pnpm eval:structure --only=gu-thepla,hi-kadhi
+ *   pnpm eval:structure --effort=low      compare thinking effort (default medium)
  *
  * Reads eval/structure/cases/*.json (synthetic, committed) and eval/structure/data/*.json (real
  * family transcripts, gitignored). Writes eval/structure/results/<timestamp>.{json,md} (gitignored).
  */
 import { mkdirSync, writeFileSync } from "node:fs";
 import { parseArgs } from "node:util";
-import { ClaudeModelClient } from "../../src/structuring/claude/client.ts";
+import {
+  CLAUDE_STRUCTURING_EFFORT,
+  ClaudeModelClient,
+} from "../../src/structuring/claude/client.ts";
 import { ClaudeRecipeStructurer } from "../../src/structuring/claude/structurer.ts";
 import { ScriptedModelClient } from "../../src/structuring/testing.ts";
 import { loadCases } from "./cases.ts";
@@ -23,8 +27,12 @@ const { values } = parseArgs({
   options: {
     mock: { type: "boolean", default: false },
     only: { type: "string" },
+    effort: { type: "string", default: CLAUDE_STRUCTURING_EFFORT },
   },
 });
+const efforts = ["low", "medium", "high", "xhigh", "max"] as const;
+const effort = efforts.find((level) => level === values.effort);
+if (!effort) throw new Error(`--effort must be one of ${efforts.join(", ")}, got ${values.effort}`);
 
 const onlyIds = values.only?.split(",");
 const cases = loadCases().filter((c) => !onlyIds || onlyIds.includes(c.id));
@@ -34,8 +42,8 @@ const apiKey = process.env.ANTHROPIC_API_KEY;
 if (!values.mock && !apiKey) {
   throw new Error("Set ANTHROPIC_API_KEY in .env, or pass --mock to run against the mock.");
 }
-const realClient = values.mock || !apiKey ? null : new ClaudeModelClient(apiKey);
-const label = realClient ? realClient.model : "mock";
+const realClient = values.mock || !apiKey ? null : new ClaudeModelClient(apiKey, { effort });
+const label = realClient ? `${realClient.model}, effort ${effort}` : "mock";
 
 const rows = await runStructureEval(
   cases,

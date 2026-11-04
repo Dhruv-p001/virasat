@@ -1,24 +1,26 @@
 import {
   DEFAULT_MAX_ATTEMPTS,
   HandwritingOutputSchema,
-  emptyInput,
+  rejectedInput,
   runTask,
-  toolSchema,
 } from "../engine.ts";
+import { validateImages } from "../images.ts";
 import type { ModelClient } from "../model-client.ts";
 import {
   HANDWRITING_PROMPT_VERSION,
   HANDWRITING_SYSTEM,
-  HANDWRITING_TOOL,
   buildHandwritingMessage,
-} from "../prompts/handwriting.v1.ts";
+} from "../prompts/handwriting.v2.ts";
 import type { HandwritingInput, HandwritingReader, StructuringResult } from "../types.ts";
 
-/** Reads a field off the raw tool input without trusting its shape. */
-function field(raw: unknown, key: string): unknown {
-  return typeof raw === "object" && raw !== null
-    ? (raw as Record<string, unknown>)[key]
-    : undefined;
+/** Transcript and recipe plus adaptive thinking, all against max_tokens. Kept under the SDK's non-streaming limit. */
+const MAX_TOKENS = 20_000;
+
+/** The transcript from an answer that failed validation, so the text read is never thrown away. */
+function transcriptOf(raw: unknown): string | null {
+  if (typeof raw !== "object" || raw === null) return null;
+  const transcript = (raw as Record<string, unknown>)["transcript"];
+  return typeof transcript === "string" && transcript.trim() !== "" ? transcript : null;
 }
 
 export class ClaudeHandwritingReader implements HandwritingReader {
@@ -37,7 +39,11 @@ export class ClaudeHandwritingReader implements HandwritingReader {
 
   async read(input: HandwritingInput): Promise<StructuringResult> {
     if (input.images.length === 0) {
-      return emptyInput(HANDWRITING_PROMPT_VERSION, this.model, "");
+      return rejectedInput(HANDWRITING_PROMPT_VERSION, this.model, "empty_input", "", []);
+    }
+    const problems = validateImages(input.images);
+    if (problems.length > 0) {
+      return rejectedInput(HANDWRITING_PROMPT_VERSION, this.model, "invalid_input", "", problems);
     }
     return runTask({
       client: this.#client,
@@ -50,15 +56,12 @@ export class ClaudeHandwritingReader implements HandwritingReader {
         })),
         { type: "text", text: buildHandwritingMessage(input) },
       ],
-      tool: { ...HANDWRITING_TOOL, inputSchema: toolSchema(HandwritingOutputSchema) },
-      maxTokens: 8192,
+      outputSchema: HandwritingOutputSchema,
+      maxTokens: MAX_TOKENS,
       promptVersion: HANDWRITING_PROMPT_VERSION,
       maxAttempts: this.#maxAttempts,
-      sourceText: (raw) => {
-        const transcript = field(raw, "transcript");
-        return typeof transcript === "string" && transcript.trim() !== "" ? transcript : null;
-      },
-      recipeOf: (raw) => field(raw, "recipe"),
+      select: ({ recipe, transcript }) => ({ recipe, transcript }),
+      salvageTranscript: transcriptOf,
       fallbackTranscript: "",
     });
   }

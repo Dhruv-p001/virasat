@@ -1,18 +1,14 @@
-import {
-  DEFAULT_MAX_ATTEMPTS,
-  StructureOutputSchema,
-  emptyInput,
-  runTask,
-  toolSchema,
-} from "../engine.ts";
+import { DEFAULT_MAX_ATTEMPTS, StructureOutputSchema, rejectedInput, runTask } from "../engine.ts";
 import type { ModelClient } from "../model-client.ts";
 import {
   STRUCTURE_PROMPT_VERSION,
   STRUCTURE_SYSTEM,
-  STRUCTURE_TOOL,
   buildStructureMessage,
-} from "../prompts/structure.v1.ts";
+} from "../prompts/structure.v2.ts";
 import type { RecipeStructurer, StructureInput, StructuringResult } from "../types.ts";
+
+/** Answer plus adaptive thinking, both counted against max_tokens. A recipe is a few hundred tokens. */
+const MAX_TOKENS = 16_000;
 
 export class ClaudeRecipeStructurer implements RecipeStructurer {
   readonly id = "claude";
@@ -30,18 +26,24 @@ export class ClaudeRecipeStructurer implements RecipeStructurer {
 
   async structure(input: StructureInput): Promise<StructuringResult> {
     if (input.transcript.trim() === "") {
-      return emptyInput(STRUCTURE_PROMPT_VERSION, this.model, input.transcript);
+      return rejectedInput(
+        STRUCTURE_PROMPT_VERSION,
+        this.model,
+        "empty_input",
+        input.transcript,
+        [],
+      );
     }
     return runTask({
       client: this.#client,
       system: STRUCTURE_SYSTEM,
       user: [{ type: "text", text: buildStructureMessage(input) }],
-      tool: { ...STRUCTURE_TOOL, inputSchema: toolSchema(StructureOutputSchema) },
-      maxTokens: 4096,
+      outputSchema: StructureOutputSchema,
+      maxTokens: MAX_TOKENS,
       promptVersion: STRUCTURE_PROMPT_VERSION,
       maxAttempts: this.#maxAttempts,
-      sourceText: () => input.transcript,
-      recipeOf: (raw) => raw,
+      select: (recipe) => ({ recipe, transcript: input.transcript }),
+      salvageTranscript: () => input.transcript,
       fallbackTranscript: input.transcript,
     });
   }
