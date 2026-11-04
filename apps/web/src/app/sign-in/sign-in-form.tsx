@@ -3,7 +3,7 @@
 import { EmailSchema, PhoneSchema, type Language } from "@virasat/core";
 import type { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
-import { type SubmitEvent, useState } from "react";
+import { type SubmitEvent, useRef, useState } from "react";
 import { Button, Field, Notice, TextInput } from "@/components/ui.tsx";
 import type { OAuthProvider } from "@/lib/env.ts";
 import { useT } from "@/lib/i18n/client.tsx";
@@ -14,6 +14,7 @@ type ErrorKey =
   | "signIn.linkExpired"
   | "signIn.codeInvalid"
   | "signIn.sendFailed"
+  | "signIn.smsFailed"
   | "signIn.tooMany"
   | "errors.email"
   | "errors.phone";
@@ -41,18 +42,26 @@ export function SignInForm({
   const [code, setCode] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<ErrorKey | null>(initialError);
+  // A second tap before React re-renders would send a second code and silently expire the first.
+  const inFlight = useRef(false);
 
-  const sendErrorKey = (err: AuthError): ErrorKey =>
-    err.status === 429 ? "signIn.tooMany" : "signIn.sendFailed";
+  const sendErrorKey = (err: AuthError): ErrorKey => {
+    if (err.status === 429) return "signIn.tooMany";
+    // The SMS provider refused or couldn't deliver: point people to email rather than a dead end.
+    if (err.code === "sms_send_failed") return "signIn.smsFailed";
+    return "signIn.sendFailed";
+  };
 
   async function sendCode(event?: SubmitEvent<HTMLFormElement>) {
     event?.preventDefault();
+    if (inFlight.current) return;
     setError(null);
     const parsed = (method === "email" ? EmailSchema : PhoneSchema).safeParse(sentTo ?? address);
     if (!parsed.success) {
       setError(method === "email" ? "errors.email" : "errors.phone");
       return;
     }
+    inFlight.current = true;
     setBusy(true);
     const options = { shouldCreateUser: true, data: { preferred_language: locale } };
     const { error: sendError } =
@@ -66,6 +75,7 @@ export function SignInForm({
             },
           })
         : await supabase.auth.signInWithOtp({ phone: parsed.data, options });
+    inFlight.current = false;
     setBusy(false);
     if (sendError) {
       setError(sendErrorKey(sendError));
@@ -77,7 +87,8 @@ export function SignInForm({
 
   async function verify(event: SubmitEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!sentTo) return;
+    if (!sentTo || inFlight.current) return;
+    inFlight.current = true;
     setError(null);
     setBusy(true);
     const token = code.replace(/\s/g, "");
@@ -86,6 +97,7 @@ export function SignInForm({
         ? await supabase.auth.verifyOtp({ email: sentTo, token, type: "email" })
         : await supabase.auth.verifyOtp({ phone: sentTo, token, type: "sms" });
     if (verifyError) {
+      inFlight.current = false;
       setBusy(false);
       setError(verifyError.status === 429 ? "signIn.tooMany" : "signIn.codeInvalid");
       return;
@@ -119,6 +131,7 @@ export function SignInForm({
           </p>
         </div>
         {error && <Notice kind="error">{t(error)}</Notice>}
+        <LocalDevNote method={method} />
         <Field label={t("signIn.codeLabel")}>
           <TextInput
             name="code"
@@ -208,6 +221,7 @@ export function SignInForm({
             />
           </Field>
         )}
+        <LocalDevNote method={method} />
         <Button type="submit" disabled={busy}>
           {busy ? t("common.saving") : t("signIn.sendCode")}
         </Button>
@@ -233,5 +247,32 @@ export function SignInForm({
         </div>
       )}
     </div>
+  );
+}
+
+/**
+ * Development only, so not translated: the local stack never delivers real email or SMS.
+ * See supabase/config.toml ([auth.sms.test_otp]) and the local inbox (Mailpit).
+ */
+function LocalDevNote({ method }: { method: Method }) {
+  if (process.env.NODE_ENV !== "development") return null;
+  return (
+    <p className="rounded-md bg-sunken px-4 py-3 text-sm text-muted">
+      {method === "email" ? (
+        <>
+          Local development doesn&apos;t send real email. Codes and links for every address arrive
+          in the local inbox at{" "}
+          <a href="http://127.0.0.1:54324" target="_blank" rel="noreferrer" className="underline">
+            127.0.0.1:54324
+          </a>
+          .
+        </>
+      ) : (
+        <>
+          Local development has no SMS provider. Use +1 555 555 0100 or +1 555 555 0101, code
+          123456.
+        </>
+      )}
+    </p>
   );
 }

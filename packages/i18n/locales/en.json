@@ -44,6 +44,7 @@
     "linkExpired": "That sign-in link has expired or was already used. Ask for a new code.",
     "codeInvalid": "That code didn't work. Check it and try again.",
     "sendFailed": "We couldn't send a code. Check the details and try again.",
+    "smsFailed": "We couldn't send a text to that number. Check it, or sign in with email instead.",
     "tooMany": "Too many attempts. Wait a minute and try again."
   },
   "onboarding": {
