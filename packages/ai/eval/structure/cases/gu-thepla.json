@@ -1,0 +1,82 @@
+{
+  "id": "gu-thepla",
+  "description": "Gujarati, andaaz measures (mutthi bhar, aankhe joine), a memory at the end",
+  "speaker": { "name": "Ba", "relation": "Grandmother" },
+  "language": "gu",
+  "transcript": "થેપલા બનાવવા માટે બે વાટકા ઘઉંનો લોટ લેવો. એમાં મુઠ્ઠી ભર બેસન નાખવું. થોડું મીઠું, હળદર અને લાલ મરચું સ્વાદ પ્રમાણે. મેથીની ભાજી સમારીને નાખવી. તેલનું મોણ નાખવું, આંખે જોઈને. પછી પાણીથી નરમ લોટ બાંધવો. વણીને તવા પર તેલ લગાવીને શેકવા. મારી બા આ થેપલા અમને પ્રવાસમાં આપતી હતી.",
+  "expected": {
+    "title": "થેપલા",
+    "servings": null,
+    "ingredients": [
+      {
+        "original_text": "બે વાટકા ઘઉંનો લોટ",
+        "name": "ઘઉંનો લોટ",
+        "suggested_quantity": 300,
+        "suggested_unit": "g",
+        "confidence": 0.4,
+        "note": null
+      },
+      {
+        "original_text": "મુઠ્ઠી ભર બેસન",
+        "name": "બેસન",
+        "suggested_quantity": 30,
+        "suggested_unit": "g",
+        "confidence": 0.3,
+        "note": null
+      },
+      {
+        "original_text": "થોડું મીઠું",
+        "name": "મીઠું",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "હળદર",
+        "name": "હળદર",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "લાલ મરચું સ્વાદ પ્રમાણે",
+        "name": "લાલ મરચું",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "મેથીની ભાજી",
+        "name": "મેથીની ભાજી",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "તેલનું મોણ નાખવું, આંખે જોઈને",
+        "name": "તેલ",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      }
+    ],
+    "steps": [
+      { "text": "ઘઉંનો લોટ લેવો અને એમાં બેસન નાખવું." },
+      { "text": "મીઠું, હળદર અને લાલ મરચું સ્વાદ પ્રમાણે નાખવું." },
+      { "text": "મેથીની ભાજી સમારીને નાખવી." },
+      { "text": "તેલનું મોણ આંખે જોઈને નાખવું." },
+      { "text": "પાણીથી નરમ લોટ બાંધવો." },
+      { "text": "વણીને તવા પર તેલ લગાવીને શેકવા." }
+    ],
+    "tips": [],
+    "story": "મારી બા આ થેપલા અમને પ્રવાસમાં આપતી હતી.",
+    "language": "gu",
+    "uncertain_fields": ["/ingredients/0/suggested_quantity", "/ingredients/1/suggested_quantity"]
+  },
+  "forbidden": ["જીરું", "દહીં", "ખાંડ"]
+}

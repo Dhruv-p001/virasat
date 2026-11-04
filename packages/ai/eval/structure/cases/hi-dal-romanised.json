@@ -1,0 +1,98 @@
+{
+  "id": "hi-dal-romanised",
+  "description": "Romanised Hindi with English words; salt and turmeric are never mentioned and must not be added",
+  "speaker": { "name": "Dadi", "relation": "Paternal grandmother" },
+  "language": "hi",
+  "transcript": "Dal banane ke liye ek katori toor dal lo, dhoke pressure cooker mein paani ke saath teen seeti tak pakao. Alag se kadhai mein ghee garam karo, usme jeera, hing aur sookhi lal mirch daalo. Phir pyaaz aur tamatar, jitna chahiye utna. Tadka dal mein daal do, upar se dhaniya.",
+  "expected": {
+    "title": "Dal",
+    "servings": null,
+    "ingredients": [
+      {
+        "original_text": "ek katori toor dal",
+        "name": "toor dal",
+        "suggested_quantity": 150,
+        "suggested_unit": "g",
+        "confidence": 0.5,
+        "note": null
+      },
+      {
+        "original_text": "paani",
+        "name": "paani",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "ghee",
+        "name": "ghee",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "jeera",
+        "name": "jeera",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "hing",
+        "name": "hing",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "sookhi lal mirch",
+        "name": "sookhi lal mirch",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "pyaaz",
+        "name": "pyaaz",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": "jitna chahiye utna"
+      },
+      {
+        "original_text": "tamatar, jitna chahiye utna",
+        "name": "tamatar",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      },
+      {
+        "original_text": "dhaniya",
+        "name": "dhaniya",
+        "suggested_quantity": null,
+        "suggested_unit": null,
+        "confidence": null,
+        "note": null
+      }
+    ],
+    "steps": [
+      { "text": "Toor dal dhoke pressure cooker mein paani ke saath teen seeti tak pakao." },
+      { "text": "Alag se kadhai mein ghee garam karo." },
+      { "text": "Usme jeera, hing aur sookhi lal mirch daalo." },
+      { "text": "Phir pyaaz aur tamatar daalo, jitna chahiye utna." },
+      { "text": "Tadka dal mein daal do." },
+      { "text": "Upar se dhaniya." }
+    ],
+    "tips": [],
+    "story": null,
+    "language": "hi",
+    "uncertain_fields": []
+  },
+  "forbidden": ["namak", "salt", "haldi", "turmeric"]
+}

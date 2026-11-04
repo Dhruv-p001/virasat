@@ -10,9 +10,11 @@
     "typecheck": "tsc --noEmit",
     "lint": "eslint . --max-warnings 0",
     "test": "vitest run",
-    "eval:stt": "node --env-file-if-exists=../../.env eval/stt/run.ts"
+    "eval:stt": "node --env-file-if-exists=../../.env eval/stt/run.ts",
+    "eval:structure": "node --env-file-if-exists=../../.env eval/structure/run.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "1.4.0",
     "@virasat/core": "workspace:*",
     "zod": "4.6.7"
   }
