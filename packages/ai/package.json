@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "1.4.0",
+    "@google/genai": "2.32.0",
     "@virasat/core": "workspace:*",
     "zod": "4.6.7"
   }

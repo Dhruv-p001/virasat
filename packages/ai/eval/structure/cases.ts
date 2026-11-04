@@ -43,21 +43,45 @@ export const StructureCaseSchema = z
   });
 export type StructureCase = z.infer<typeof StructureCaseSchema>;
 
-const folders = [new URL("./cases/", import.meta.url), new URL("./data/", import.meta.url)];
+/** Where a case came from. Private cases hold real family transcripts and must stay off free-tier APIs. */
+export type CaseOrigin = "synthetic" | "private";
+export type LoadedCase = StructureCase & { origin: CaseOrigin };
+
+const folders: [URL, CaseOrigin][] = [
+  [new URL("./cases/", import.meta.url), "synthetic"],
+  [new URL("./data/", import.meta.url), "private"],
+];
 
 /** Loads every *.json case from cases/ and, when present, data/. */
-export function loadCases(): StructureCase[] {
-  return folders.flatMap((folder) => {
+export function loadCases(): LoadedCase[] {
+  return folders.flatMap(([folder, origin]) => {
     let files: string[];
     try {
       files = readdirSync(folder).filter((file) => file.endsWith(".json"));
     } catch {
       return []; // data/ does not exist on a fresh clone
     }
-    return files
-      .sort()
-      .map((file) =>
-        StructureCaseSchema.parse(JSON.parse(readFileSync(new URL(file, folder), "utf8"))),
-      );
+    return files.sort().map((file) => ({
+      ...StructureCaseSchema.parse(JSON.parse(readFileSync(new URL(file, folder), "utf8"))),
+      origin,
+    }));
   });
+}
+
+/** Providers that may see private (real family) transcripts. Free tiers may train on inputs (ADR 0011). */
+const PRIVATE_SAFE_PROVIDERS: readonly string[] = ["claude", "mock"];
+
+/**
+ * Splits cases into those a provider may receive and those it may not. The Gemini free tier is
+ * synthetic-only, so private cases are held back from it rather than sent.
+ */
+export function casesForProvider(
+  cases: LoadedCase[],
+  provider: string,
+): { allowed: LoadedCase[]; withheld: LoadedCase[] } {
+  if (PRIVATE_SAFE_PROVIDERS.includes(provider)) return { allowed: cases, withheld: [] };
+  return {
+    allowed: cases.filter((c) => c.origin === "synthetic"),
+    withheld: cases.filter((c) => c.origin === "private"),
+  };
 }
