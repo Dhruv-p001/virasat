@@ -137,3 +137,24 @@ export async function listRecordingLinks(personId: string) {
   if (error) throw error;
   return data.filter((link) => link.upload_count < link.max_uploads);
 }
+
+/** Captures a writer still has to deal with, newest first. Confirmed ones are recipes by then. */
+export const listOpenCaptures = cache(async (familyId: string, limit = 50) => {
+  assertUuid(familyId);
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("capture_jobs")
+    .select("id, status, source_type, created_at, people(display_name, relation_label)")
+    .eq("family_id", familyId)
+    .in("status", ["uploaded", "transcribing", "structuring", "ready_for_review", "failed"])
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return data.map((job) => ({
+    id: job.id,
+    status: job.status,
+    sourceType: job.source_type,
+    createdAt: job.created_at,
+    personName: job.people ? (job.people.relation_label ?? job.people.display_name) : null,
+  }));
+});

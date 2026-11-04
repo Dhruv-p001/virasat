@@ -7,3 +7,4 @@ export * from "./forms.ts";
 export * from "./countries.ts";
 export * from "./capture.ts";
 export * from "./upload.ts";
+export * from "./capture-output.ts";

@@ -90,8 +90,8 @@ export function Section({
   );
 }
 
-export function Card({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-lg bg-surface p-4 ${className}`}>{children}</div>;
+export function Card({ className = "", ...props }: ComponentProps<"div">) {
+  return <div {...props} className={`rounded-lg bg-surface p-4 ${className}`} />;
 }
 
 export function EmptyState({

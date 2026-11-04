@@ -37,10 +37,19 @@ export default defineConfig({
     { name: "mobile", use: { ...devices["Pixel 7"] } },
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
   ],
-  webServer: {
-    command: isCI ? "pnpm build && pnpm start" : "pnpm dev",
-    url: "http://localhost:3000",
-    reuseExistingServer: !isCI,
-    timeout: 240_000,
-  },
+  webServer: [
+    {
+      command: isCI ? "pnpm build && pnpm start" : "pnpm dev",
+      url: "http://localhost:3000",
+      reuseExistingServer: !isCI,
+      timeout: 240_000,
+    },
+    {
+      // The capture pipeline runs on Inngest. Its dev server calls back into the app above.
+      command: "pnpm --workspace-root dev:inngest",
+      url: "http://localhost:8288",
+      reuseExistingServer: !isCI,
+      timeout: 240_000,
+    },
+  ],
 });

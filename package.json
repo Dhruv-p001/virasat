@@ -9,6 +9,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
+    "dev:inngest": "npx --yes inngest-cli@1.49.0 dev -u http://localhost:3000/api/inngest --no-discovery",
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "test": "turbo run test",

@@ -52,6 +52,7 @@ Rules:
 - **Server functions are the only writers.** Each is called with the service role after the session is checked:
   - `begin_capture()` records consent, creates the job and registers the upload path.
   - `confirm_upload()` (ADR 0012) moves a job from `awaiting_upload` to `uploaded` once the registered file is in storage at the registered size. It is called for an organiser or an elder's link token, and is safe to repeat.
+  - `advance_capture()` (ADR 0013) is the pipeline's only way to move a job along: `uploaded → transcribing → structuring → ready_for_review`, or `failed` from any of those. A repeated step is a no-op, and a confirmed capture is never touched. It is service-role only.
   - `confirm_capture()` creates the recipe and its original version and attaches the media.
   - `publish_correction()` is for owners and admins.
   - `create_contributor_link()`, `revoke_contributor_link()` and `contributor_link_info()` manage elder recording links.

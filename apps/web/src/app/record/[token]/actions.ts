@@ -1,6 +1,7 @@
 "use server";
 
 import { baseMimeType, CONSENT_WORDING_VERSION, MAX_AUDIO_BYTES } from "@virasat/core";
+import { sendCaptureUploaded } from "@virasat/jobs";
 import { z } from "zod";
 import { findLinkCapture, isTokenShaped } from "@/lib/capture/links.ts";
 import { createAdminClient } from "@/lib/supabase/admin.ts";
@@ -82,6 +83,22 @@ export async function refreshUpload(token: string, jobId: string): Promise<Refre
   return { ok: true, uploadUrl, done: false };
 }
 
+/**
+ * Starts the capture pipeline. The recording is already safe and confirmed, so a failure here must
+ * not fail the elder's upload: the sweep resends the event for any capture left in "uploaded".
+ * Only the error class is logged, never anything about the capture.
+ */
+async function startPipeline(jobId: string): Promise<void> {
+  try {
+    await sendCaptureUploaded(jobId);
+  } catch (error) {
+    console.error(
+      "capture pipeline event not sent",
+      error instanceof Error ? error.name : "unknown",
+    );
+  }
+}
+
 export async function confirmUpload(token: string, jobId: string): Promise<ConfirmResult> {
   if (!isTokenShaped(token) || !UuidSchema.safeParse(jobId).success) {
     return { ok: false, reason: "invalid_link" };
@@ -90,7 +107,10 @@ export async function confirmUpload(token: string, jobId: string): Promise<Confi
     p_job_id: jobId,
     p_contributor_token: token,
   });
-  if (!error) return { ok: true };
+  if (!error) {
+    await startPipeline(jobId);
+    return { ok: true };
+  }
   if (error.code === "42501") return { ok: false, reason: "invalid_link" };
   if (error.code === "22023") return { ok: false, reason: "incomplete" };
   throw new Error("confirm_upload failed");
