@@ -120,3 +120,20 @@ export async function listPendingInvites(familyId: string) {
   if (error) throw error;
   return data;
 }
+
+/**
+ * Recording links still usable for one person. RLS lets only members who can add recipes see
+ * them; token hashes are never selected, so the link itself can't be recovered from here.
+ */
+export async function listRecordingLinks(personId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("contributor_links")
+    .select("id, max_uploads, upload_count, expires_at")
+    .eq("person_id", personId)
+    .is("revoked_at", null)
+    .gt("expires_at", new Date().toISOString())
+    .order("created_at", { ascending: false });
+  if (error) throw error;
+  return data.filter((link) => link.upload_count < link.max_uploads);
+}

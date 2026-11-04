@@ -51,6 +51,7 @@ Rules:
 - **Recipes on `media`.** The table also has `family_id`, `storage_bucket`, `mime_type` and `byte_size`. Recipes and versions carry `family_id` for RLS.
 - **Server functions are the only writers.** Each is called with the service role after the session is checked:
   - `begin_capture()` records consent, creates the job and registers the upload path.
+  - `confirm_upload()` (ADR 0012) moves a job from `awaiting_upload` to `uploaded` once the registered file is in storage at the registered size. It is called for an organiser or an elder's link token, and is safe to repeat.
   - `confirm_capture()` creates the recipe and its original version and attaches the media.
   - `publish_correction()` is for owners and admins.
   - `create_contributor_link()`, `revoke_contributor_link()` and `contributor_link_info()` manage elder recording links.
