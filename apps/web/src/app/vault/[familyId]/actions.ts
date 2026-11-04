@@ -7,6 +7,7 @@ import {
   generateToken,
   InviteInputSchema,
   PersonInputSchema,
+  recordingLinkUrl,
   VaultNameSchema,
 } from "@virasat/core";
 import { revalidatePath } from "next/cache";
@@ -288,5 +289,50 @@ export async function revokeInvite(familyId: string, inviteId: string): Promise<
   });
   if (error) return databaseError(error);
   revalidatePath(`/vault/${familyId}/members`);
+  return { status: "success" };
+}
+
+// ------------------------------------------------------------------------------ recording links
+
+export type CreatedRecordingLink = { url: string };
+
+/**
+ * A recording link for an elder. The raw token exists only in the returned URL: the database
+ * keeps its hash, so the link can't be shown again later (create a new one instead).
+ */
+export async function createRecordingLink(
+  familyId: string,
+  personId: string,
+  _prev: ActionState<CreatedRecordingLink>,
+): Promise<ActionState<CreatedRecordingLink>> {
+  assertUuid(familyId);
+  assertUuid(personId);
+  const userId = await requireUserId(`/vault/${familyId}/people/${personId}`);
+  const token = generateToken();
+  const { error } = await createAdminClient().rpc("create_contributor_link", {
+    p_actor: userId,
+    p_person_id: personId,
+    p_token: token,
+  });
+  if (error) return databaseError(error);
+  revalidatePath(`/vault/${familyId}/people/${personId}`);
+  return { status: "success", data: { url: recordingLinkUrl(publicEnv.siteUrl, token) } };
+}
+
+export async function revokeRecordingLink(
+  familyId: string,
+  personId: string,
+  linkId: string,
+): Promise<ActionState> {
+  assertUuid(familyId);
+  assertUuid(personId);
+  assertUuid(linkId);
+  const userId = await requireUserId(`/vault/${familyId}/people/${personId}`);
+  const { error } = await createAdminClient().rpc("revoke_contributor_link", {
+    p_actor: userId,
+    p_link_id: linkId,
+  });
+  if (error) return databaseError(error);
+  revalidatePath(`/vault/${familyId}/people/${personId}`);
   return { status: "success" };
 }

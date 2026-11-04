@@ -195,5 +195,42 @@
     "organiserNote": "If {{name}} changes their mind, you can delete the recording at any time.",
     "scanNote": "A computer reads this page to type up the recipe. The original photo stays in your family vault.",
     "limitReached": "That's 10 minutes, the most one recording can hold. Everything you said has been kept."
+  },
+  "recordingLinks": {
+    "title": "Recording link",
+    "intro": "Send {{name}} a link. They tap it, press one big button and tell the recipe. No app or account needed.",
+    "create": "Create a recording link",
+    "creating": "Creating…",
+    "ready": "Your link is ready. Copy it now: for safety it can't be shown again.",
+    "linkLabel": "Link for {{name}}",
+    "copy": "Copy link",
+    "copied": "Copied",
+    "whatsapp": "Send on WhatsApp",
+    "shareText": "Please tell me your recipe. Tap this link and press the big button: {{url}}",
+    "activeTitle": "Links in use",
+    "left": "Recordings left: {{left}}",
+    "until": "Works until {{date}}",
+    "stop": "Stop this link",
+    "stopConfirm": "Stop this link? It will stop working right away."
+  },
+  "record": {
+    "startAria": "Start recording",
+    "stopAria": "Stop and send",
+    "recording": "Recording…",
+    "tapToStart": "Tap to tell your recipe",
+    "tapToStop": "Tap when you are done",
+    "sendingTitle": "Sending…",
+    "sendingBody": "Please keep this page open.",
+    "waitingTitle": "No connection right now",
+    "waitingBody": "Your recording is safe on this phone. We will keep trying.",
+    "resumed": "A recording from earlier is still being sent.",
+    "sentTitle": "Sent. Thank you!",
+    "sentBody": "Your recipe has reached your family.",
+    "another": "Record another",
+    "invalidTitle": "This link doesn't work any more",
+    "invalidBody": "Please ask your family to send you a new one.",
+    "micDenied": "We couldn't use the microphone. Please allow it in your browser, then try again.",
+    "unsupported": "This browser can't record. Please open the link in Chrome or Safari.",
+    "retry": "Try again"
   }
 }

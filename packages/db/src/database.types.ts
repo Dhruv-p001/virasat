@@ -440,6 +440,9 @@ isOneToOne: false
 "confirm_capture":
 { Args: { "p_actor": string,"p_content": Json,"p_job_id": string }; Returns: string
                            },
+"confirm_upload":
+{ Args: { "p_actor"?: string,"p_contributor_token"?: string,"p_job_id": string }; Returns: Database["public"]['Enums']["capture_status"]
+                           },
 "contributor_link_info":
 { Args: { "p_token": string }; Returns: {
               "family_id": string,"person_display_name": string,"photo_path": string,"relation_label": string,"uploads_left": number

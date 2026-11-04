@@ -19,6 +19,7 @@
 > - **0007:** Sessions use `@supabase/ssr` with a `proxy.ts` (Next 16's name for middleware). Email sign-in sends a link and a code; local test phones use code `123456`.
 > - **0008:** Translations use i18next on the server and react-i18next in client components. Keys are type-checked.
 > - **0010:** Capture and recipe tables are read-only for clients. Every write goes through service-role SQL functions (`begin_capture`, `confirm_capture`, `publish_correction`, contributor-link functions) that re-check the actor.
+> - **0012:** An elder's recording stays in IndexedDB until the server confirms it. Uploads go straight to storage by signed URL and are retried whole, reusing the same capture. `confirm_upload` marks a job uploaded.
 > - **Consent:** wording version `2026-11-v1` (`docs/consent.md`, i18n `consent.*`). Each sentence is a promise with conditions that must stay true.
 > - **Recording limit:** 10 minutes per recording (`MAX_RECORDING_SECONDS` in `packages/core`).
 > - The full data model is in `docs/schema.md`. Soft deletes go through SQL functions (e.g. `remove_person()`), never direct `deleted_at` writes.

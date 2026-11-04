@@ -6,3 +6,4 @@ export * from "./paths.ts";
 export * from "./forms.ts";
 export * from "./countries.ts";
 export * from "./capture.ts";
+export * from "./upload.ts";

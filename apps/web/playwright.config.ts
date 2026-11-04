@@ -1,9 +1,16 @@
+import { fileURLToPath } from "node:url";
 import { defineConfig, devices } from "@playwright/test";
 
 // End-to-end tests against the real local stack (`pnpm db:start`, then `pnpm env:local`).
 // Locally they reuse a running dev server; CI builds and starts the app.
 
 const isCI = Boolean(process.env.CI);
+
+// Chromium plays this file as the microphone: elders' recordings are tested end to end with no
+// real audio hardware. It loops, so any recording length gets sound.
+const FAKE_MICROPHONE = fileURLToPath(
+  new URL("./e2e/fixtures/recipe-fixture.wav", import.meta.url),
+);
 
 export default defineConfig({
   testDir: "./e2e",
@@ -17,6 +24,13 @@ export default defineConfig({
     baseURL: "http://localhost:3000",
     trace: "retain-on-failure",
     locale: "en-GB",
+    launchOptions: {
+      args: [
+        "--use-fake-ui-for-media-stream",
+        "--use-fake-device-for-media-stream",
+        `--use-file-for-fake-audio-capture=${FAKE_MICROPHONE}`,
+      ],
+    },
   },
   projects: [
     // Phones first: most organisers and every elder are on one.

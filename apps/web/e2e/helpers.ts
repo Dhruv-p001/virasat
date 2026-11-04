@@ -1,4 +1,7 @@
-import { expect, type Page } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import type { Database } from "@virasat/db";
+import { createClient } from "@supabase/supabase-js";
+import { type Browser, expect, type Page, type TestInfo } from "@playwright/test";
 
 // Local Supabase test inbox (Mailpit) and the fixed test phone numbers from supabase/config.toml.
 const MAILPIT = "http://127.0.0.1:54324/api/v1";
@@ -82,4 +85,42 @@ export async function addPerson(
   await page.getByRole("button", { name: "Add to vault" }).click();
   await expect(page.getByRole("heading", { level: 1, name: person.relation })).toBeVisible();
   return page.url();
+}
+
+// --- Service-role access for checking what the server stored (never used to do the user's steps).
+
+function localEnv(name: string): string {
+  const fromProcess = process.env[name];
+  if (fromProcess) return fromProcess;
+  const file = readFileSync(new URL("../.env.local", import.meta.url), "utf8");
+  const line = file.split("\n").find((l) => l.startsWith(`${name}=`));
+  if (!line) throw new Error(`${name} is not set. Run pnpm env:local.`);
+  return line.slice(name.length + 1).trim();
+}
+
+export function adminClient() {
+  return createClient<Database>(
+    localEnv("NEXT_PUBLIC_SUPABASE_URL"),
+    localEnv("SUPABASE_SERVICE_ROLE_KEY"),
+    {
+      auth: { persistSession: false },
+    },
+  );
+}
+
+/** A signed-out visitor on a phone-or-desktop context like the current project's, with a microphone. */
+export async function newElderPage(browser: Browser, project: TestInfo["project"]) {
+  const { viewport, isMobile, hasTouch, userAgent, deviceScaleFactor, baseURL, locale } =
+    project.use;
+  const context = await browser.newContext({
+    ...(viewport ? { viewport } : {}),
+    ...(isMobile !== undefined ? { isMobile } : {}),
+    ...(hasTouch !== undefined ? { hasTouch } : {}),
+    ...(userAgent ? { userAgent } : {}),
+    ...(deviceScaleFactor ? { deviceScaleFactor } : {}),
+    ...(baseURL ? { baseURL } : {}),
+    ...(locale ? { locale } : {}),
+    permissions: ["microphone"],
+  });
+  return { context, page: await context.newPage() };
 }
