@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  baseMimeType,
-  formatTimer,
-  MAX_RECORDING_SECONDS,
-  pickRecordingMimeType,
-  runUpload,
-  type UploadOutcome,
-} from "@virasat/core";
+import { formatTimer, runUpload, type UploadOutcome } from "@virasat/core";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Avatar } from "@/components/ui.tsx";
+import { useVoiceRecorder } from "@/lib/capture/use-voice-recorder.ts";
 import { useT } from "@/lib/i18n/client.tsx";
 import {
   listPending,
@@ -53,13 +47,6 @@ export function Recorder({
   const [screen, setScreen] = useState<Screen>("checking");
   const [waiting, setWaiting] = useState(false);
   const [resumed, setResumed] = useState(false);
-  const [limitHit, setLimitHit] = useState(false);
-  const [seconds, setSeconds] = useState(0);
-
-  const recorder = useRef<MediaRecorder | null>(null);
-  const stream = useRef<MediaStream | null>(null);
-  const chunks = useRef<Blob[]>([]);
-  const tick = useRef<ReturnType<typeof setInterval> | null>(null);
   const uploading = useRef(false);
 
   const send = useCallback(async (entry: Pending) => {
@@ -114,50 +101,15 @@ export function Recorder({
     setScreen("idle");
   }, []);
 
-  const releaseMic = useCallback(() => {
-    if (tick.current) clearInterval(tick.current);
-    tick.current = null;
-    for (const track of stream.current?.getTracks() ?? []) track.stop();
-    stream.current = null;
-  }, []);
-
-  useEffect(() => releaseMic, [releaseMic]);
-
-  const stop = useCallback(() => {
-    if (recorder.current?.state === "recording") recorder.current.stop();
-  }, []);
-
-  const start = useCallback(async () => {
-    const mimeType =
-      typeof MediaRecorder === "undefined"
-        ? null
-        : pickRecordingMimeType((type) => MediaRecorder.isTypeSupported(type));
-    // Undefined on pages that are not served over https.
-    const devices = navigator.mediaDevices as MediaDevices | undefined;
-    if (!devices || !mimeType) {
-      setScreen("unsupported");
-      return;
-    }
-    try {
-      stream.current = await devices.getUserMedia({ audio: true });
-    } catch {
-      setScreen("micDenied");
-      return;
-    }
-
-    chunks.current = [];
-    setLimitHit(false);
-    setSeconds(0);
-    const media = new MediaRecorder(stream.current, { mimeType });
-    recorder.current = media;
-    media.ondataavailable = (event) => {
-      if (event.data.size > 0) chunks.current.push(event.data);
-    };
-    media.onstop = () => {
-      releaseMic();
-      const blob = new Blob(chunks.current, { type: baseMimeType(media.mimeType || mimeType) });
-      chunks.current = [];
-      if (blob.size === 0) {
+  const { start, stop, seconds, limitHit } = useVoiceRecorder({
+    onStarted: () => {
+      setScreen("recording");
+    },
+    onProblem: (problem) => {
+      setScreen(problem);
+    },
+    onFinished: (blob) => {
+      if (!blob) {
         setScreen("idle");
         return;
       }
@@ -170,20 +122,8 @@ export function Recorder({
       };
       // Safe on the phone before anything is sent.
       void savePending(entry).then(() => send(entry));
-    };
-
-    const startedAt = performance.now();
-    tick.current = setInterval(() => {
-      const elapsed = (performance.now() - startedAt) / 1000;
-      setSeconds(elapsed);
-      if (elapsed >= MAX_RECORDING_SECONDS) {
-        setLimitHit(true);
-        stop();
-      }
-    }, 250);
-    media.start(1000);
-    setScreen("recording");
-  }, [releaseMic, send, stop, token]);
+    },
+  });
 
   const retryStuck = useCallback(() => {
     void (async () => {

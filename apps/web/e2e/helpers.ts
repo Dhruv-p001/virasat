@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { type Browser, expect, type Page, type TestInfo } from "@playwright/test";
 
 // Local Supabase test inbox (Mailpit) and the fixed test phone numbers from supabase/config.toml.
-const MAILPIT = "http://127.0.0.1:54324/api/v1";
+const MAILPIT = `${process.env["MAILPIT_URL"] ?? "http://127.0.0.1:54324"}/api/v1`;
 export const TEST_PHONES = ["+15555550100", "+15555550101"] as const;
 const TEST_PHONE_CODE = "123456";
 
@@ -106,6 +106,20 @@ export function adminClient() {
       auth: { persistSession: false },
     },
   );
+}
+
+/** The account id behind a test address, for setting up what a test needs through the service role. */
+export async function userIdByEmail(address: string): Promise<string> {
+  const { data, error } = await adminClient().auth.admin.listUsers({ perPage: 1000 });
+  if (error) throw error;
+  const user = data.users.find((candidate) => candidate.email === address);
+  if (!user) throw new Error(`No account for ${address}`);
+  return user.id;
+}
+
+/** The last path segment of a URL: the id in /vault/<id> or /people/<id>. */
+export function lastSegment(url: string): string {
+  return new URL(url).pathname.split("/").filter(Boolean).pop() ?? "";
 }
 
 /** A signed-out visitor on a phone-or-desktop context like the current project's, with a microphone. */

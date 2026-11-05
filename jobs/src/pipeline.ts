@@ -39,7 +39,10 @@ export interface CaptureRecord {
   transcript: string | null;
   detectedLanguage: string | null;
   speaker: { name: string; relation: string | null };
-  /** The originals, never derived copies, oldest first. */
+  /**
+   * The files to read, oldest first: each original, or its readable copy when it has one. A voice
+   * capture has just its recording. A handwriting capture has its pages in order.
+   */
   media: CaptureMedia[];
 }
 

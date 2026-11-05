@@ -1,4 +1,5 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { readableMedia } from "@virasat/core";
 import type { Database, Json } from "@virasat/db";
 import type {
   AdvancePatch,
@@ -37,9 +38,8 @@ export function supabaseStore(admin: Admin): PipelineStore {
 
       const { data: media, error: mediaError } = await admin
         .from("media")
-        .select("storage_bucket, storage_path, mime_type")
+        .select("id, derived_from_media_id, storage_bucket, storage_path, mime_type")
         .eq("capture_job_id", job.id)
-        .is("derived_from_media_id", null)
         .is("removed_at", null)
         .order("created_at");
       if (mediaError) throw mediaError;
@@ -62,7 +62,7 @@ export function supabaseStore(admin: Admin): PipelineStore {
         transcript: job.transcript,
         detectedLanguage: job.detected_language,
         speaker,
-        media: media.map((row) => ({
+        media: readableMedia(media).map((row) => ({
           bucket: row.storage_bucket,
           path: row.storage_path,
           mimeType: row.mime_type,

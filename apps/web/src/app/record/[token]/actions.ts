@@ -1,9 +1,9 @@
 "use server";
 
 import { baseMimeType, CONSENT_WORDING_VERSION, MAX_AUDIO_BYTES } from "@virasat/core";
-import { sendCaptureUploaded } from "@virasat/jobs";
 import { z } from "zod";
 import { findLinkCapture, isTokenShaped } from "@/lib/capture/links.ts";
+import { startPipeline } from "@/lib/capture/pipeline.ts";
 import { createAdminClient } from "@/lib/supabase/admin.ts";
 
 // The elder's upload steps. There is no session: the recording link's token is the credential,
@@ -81,22 +81,6 @@ export async function refreshUpload(token: string, jobId: string): Promise<Refre
     true,
   );
   return { ok: true, uploadUrl, done: false };
-}
-
-/**
- * Starts the capture pipeline. The recording is already safe and confirmed, so a failure here must
- * not fail the elder's upload: the sweep resends the event for any capture left in "uploaded".
- * Only the error class is logged, never anything about the capture.
- */
-async function startPipeline(jobId: string): Promise<void> {
-  try {
-    await sendCaptureUploaded(jobId);
-  } catch (error) {
-    console.error(
-      "capture pipeline event not sent",
-      error instanceof Error ? error.name : "unknown",
-    );
-  }
 }
 
 export async function confirmUpload(token: string, jobId: string): Promise<ConfirmResult> {

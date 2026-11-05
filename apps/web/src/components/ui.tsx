@@ -42,15 +42,20 @@ export function PageShell({
   title,
   back,
   actions,
+  wide = false,
   children,
 }: {
   title: ReactNode;
   back?: { href: string; label: string };
   actions?: ReactNode;
+  /** For screens that put two things side by side on a desktop, like a recording beside its recipe. */
+  wide?: boolean;
   children: ReactNode;
 }) {
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-col gap-8 px-4 py-8 sm:px-6">
+    <main
+      className={`mx-auto flex w-full flex-col gap-8 px-4 py-8 sm:px-6 ${wide ? "max-w-5xl" : "max-w-2xl"}`}
+    >
       <header className="flex flex-col gap-3">
         {back && (
           <Link href={back.href} className="flex items-center gap-1 self-start text-muted">

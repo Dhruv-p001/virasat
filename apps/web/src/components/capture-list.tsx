@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { AutoRefresh } from "@/components/auto-refresh.tsx";
 import { Card, EmptyState } from "@/components/ui.tsx";
 import type { listOpenCaptures } from "@/lib/data.ts";
@@ -8,7 +9,13 @@ type Capture = Awaited<ReturnType<typeof listOpenCaptures>>[number];
 const IN_PROGRESS = new Set(["uploaded", "transcribing", "structuring"]);
 
 /** Recordings and pages waiting on the pipeline or on a person, with honest progress. */
-export async function CaptureList({ captures }: { captures: Capture[] }) {
+export async function CaptureList({
+  familyId,
+  captures,
+}: {
+  familyId: string;
+  captures: Capture[];
+}) {
   const { t } = await getT();
 
   if (captures.length === 0) {
@@ -52,7 +59,12 @@ export async function CaptureList({ captures }: { captures: Capture[] }) {
               data-testid="capture"
               data-status={capture.status}
             >
-              <span className="text-lg font-semibold">{title(capture)}</span>
+              <Link
+                href={`/vault/${familyId}/captures/${capture.id}`}
+                className="min-h-tap-target py-2 text-lg font-semibold underline-offset-4 hover:underline"
+              >
+                {title(capture)}
+              </Link>
               <span role="status" className="text-muted">
                 {progress(capture)}
               </span>

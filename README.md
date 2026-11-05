@@ -47,7 +47,9 @@ When an elder's recording is confirmed, the app sends a `capture/uploaded` event
 - **Live mode** (`AI_MODE=live`) uses Claude for the recipe and the speech-to-text provider named by `STT_PROVIDER` (OpenAI by default). Set `ANTHROPIC_API_KEY` and that provider's key. If `AI_MODE` is unset, live is used when the keys are present and mock otherwise; production never falls back to mock. Gemini is never used here (ADR 0011).
 - **Hosted,** set `INNGEST_EVENT_KEY` and `INNGEST_SIGNING_KEY` and register `https://<site>/api/inngest` with Inngest.
 
-See `docs/adr/0013-capture-pipeline.md`.
+Organisers capture in the app too: from a person's page, record them, or photograph up to four handwritten pages. Each photo is kept as taken, and a readable copy is made in the browser. When a capture is ready, "Waiting for you" opens the review screen, where a person checks the draft against the original and saves it. Only saving makes a recipe.
+
+See `docs/adr/0013-capture-pipeline.md` and `docs/adr/0014-organiser-capture-and-review.md`.
 
 ## Speech-to-text evaluation (Phase 0)
 

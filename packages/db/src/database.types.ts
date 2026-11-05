@@ -432,6 +432,11 @@ isOneToOne: false
             "accept_invite":
 { Args: { "p_profile_id": string,"p_token": string }; Returns: string
                            },
+"add_capture_media":
+{ Args: { "p_actor": string,"p_byte_size": number,"p_derived_from_media_id"?: string,"p_height"?: number,"p_job_id": string,"p_mime_type": string,"p_width"?: number }; Returns: {
+              "media_id": string,"storage_bucket": string,"storage_path": string
+            }[]
+                           },
 "advance_capture":
 { Args: { "p_ai_output"?: Json,"p_detected_language"?: string,"p_error"?: string,"p_job_id": string,"p_provider_meta"?: Json,"p_to": Database["public"]['Enums']["capture_status"],"p_transcript"?: string }; Returns: Database["public"]['Enums']["capture_status"]
                            },
