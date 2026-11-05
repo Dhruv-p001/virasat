@@ -1,15 +1,20 @@
 "use client";
 
-import { Mic, Plus, UserPlus, Users } from "lucide-react";
+import { Mic, PenLine, Plus, UserPlus, Users } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@virasat/ui/cn";
 import { Sheet, SheetClose, SheetContent, SheetTrigger } from "@virasat/ui/sheet";
 import { buttonClass } from "@virasat/ui/button";
 import { useT } from "@/lib/i18n/client.tsx";
 
-type Row = { href: string; icon: "capture" | "person" | "invite"; title: string; hint: string };
+type Row = {
+  href: string;
+  icon: "type" | "capture" | "person" | "invite";
+  title: string;
+  hint: string;
+};
 
-const icons = { capture: Mic, person: UserPlus, invite: Users };
+const icons = { type: PenLine, capture: Mic, person: UserPlus, invite: Users };
 
 /**
  * The Add sheet: quick starts that fit a thumb. On a phone the trigger is the raised centre
@@ -30,6 +35,12 @@ export function AddSheet({
   const rows: Row[] = [];
   if (canWrite) {
     rows.push(
+      {
+        href: `/vault/${familyId}/recipes/new`,
+        icon: "type",
+        title: t("ui.add.type"),
+        hint: t("ui.add.typeHint"),
+      },
       {
         href: `/vault/${familyId}#people`,
         icon: "capture",
