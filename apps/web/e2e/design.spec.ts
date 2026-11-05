@@ -49,7 +49,9 @@ test("Moments shows a designed empty state and the nav marks it current", async 
 });
 
 test("the skip link jumps to the page content", async ({ page }) => {
-  await createVaultAs(page, uniqueEmail("skip"), "Skip family");
+  const vaultUrl = await createVaultAs(page, uniqueEmail("skip"), "Skip family");
+  // A fresh page load, so focus starts at the top (the sign-up steps left it on a link).
+  await page.goto(vaultUrl);
   await page.keyboard.press("Tab");
   const skip = page.getByRole("link", { name: "Skip to content" });
   await expect(skip).toBeFocused();

@@ -48,6 +48,9 @@ export default async function HomePage() {
         <p className="max-w-prose text-lg leading-relaxed text-muted">{t("landing.body")}</p>
         <div className="flex flex-wrap gap-3">
           <ButtonLink href="/sign-in">{t("landing.getStarted")}</ButtonLink>
+          <ButtonLink href="/sample" kind="secondary">
+            {t("sample.exploreLink")}
+          </ButtonLink>
           <ButtonLink href="/sign-in" kind="quiet">
             {t("landing.signIn")}
           </ButtonLink>

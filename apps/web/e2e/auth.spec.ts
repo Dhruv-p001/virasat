@@ -12,6 +12,11 @@ test("a new organiser signs in with an email code and names their vault", async 
 
   await page.getByLabel("Vault name").fill("Desai family");
   await page.getByRole("button", { name: "Create vault" }).click();
+  // Straight to one recipe they know by heart; skipping it lands in the (empty) vault.
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Add one recipe you know by heart" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Not now, go to my vault" }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Desai family" })).toBeVisible();
   await expect(page.getByText("You are Owner")).toBeVisible();
   await expect(page.getByText("Add the people whose recipes you want to keep")).toBeVisible();

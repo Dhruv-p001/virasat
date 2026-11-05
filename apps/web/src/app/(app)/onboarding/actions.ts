@@ -21,5 +21,6 @@ export async function createVault(_prev: ActionState, formData: FormData): Promi
     p_name: parsed.data.name,
   });
   if (error) return databaseError(error, formData);
-  redirect(`/vault/${familyId}`);
+  // Nobody lands on an empty vault: straight to one recipe they know by heart.
+  redirect(`/vault/${familyId}/recipes/new?first=1`);
 }

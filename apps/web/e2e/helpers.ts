@@ -70,6 +70,11 @@ export async function createVaultAs(
   await expect(page).toHaveURL(/\/onboarding/);
   await page.getByLabel("Vault name").fill(vaultName);
   await page.getByRole("button", { name: "Create vault" }).click();
+  // Nobody lands on an empty vault: onboarding goes to the first recipe. Skip it to reach the vault.
+  await expect(
+    page.getByRole("heading", { level: 1, name: /one recipe you know by heart/ }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: "Not now, go to my vault" }).click();
   await expect(page.getByRole("heading", { level: 1, name: vaultName })).toBeVisible();
   return page.url();
 }
