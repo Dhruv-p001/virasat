@@ -7,7 +7,7 @@ import { createClient } from "./supabase/server.ts";
 
 const PHOTO_URL_SECONDS = 60 * 60;
 
-async function signedImageUrls(paths: (string | null)[]): Promise<Map<string, string>> {
+export async function signedImageUrls(paths: (string | null)[]): Promise<Map<string, string>> {
   const wanted = [...new Set(paths.filter((path): path is string => Boolean(path)))];
   if (wanted.length === 0) return new Map();
   const supabase = await createClient();
@@ -61,3 +61,28 @@ export const listMoments = cache(async (familyId: string, limit = 50) => {
     photoUrl: moment.photo_path ? (urls.get(moment.photo_path) ?? null) : null,
   }));
 });
+
+/** One recipe's moments, newest first. RLS: whoever can read the recipe sees them. */
+export async function listRecipeMoments(recipeId: string, limit = 20) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("attempts")
+    .select(
+      "id, author_profile_id, note, rating, cooked_on, photo_path, created_at, author:profiles!attempts_author_profile_id_fkey(display_name)",
+    )
+    .eq("recipe_id", recipeId)
+    .is("deleted_at", null)
+    .order("cooked_on", { ascending: false })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  const urls = await signedImageUrls(data.map((moment) => moment.photo_path));
+  return data.map((moment) => ({
+    id: moment.id,
+    authorName: moment.author?.display_name ?? "",
+    note: moment.note,
+    rating: moment.rating,
+    cookedOn: moment.cooked_on,
+    photoUrl: moment.photo_path ? (urls.get(moment.photo_path) ?? null) : null,
+  }));
+}

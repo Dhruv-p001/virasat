@@ -99,12 +99,13 @@ export function ReviewForm(props: Props) {
     setErrors({});
     startSaving(async () => {
       const outcome = await confirmReview(familyId, jobId, result.content);
-      if (outcome.status === "error") {
-        setServerError(outcome.message ?? "errors.generic");
+      if (outcome.status !== "success" || !outcome.data) {
+        setServerError(
+          outcome.status === "error" ? (outcome.message ?? "errors.generic") : "errors.generic",
+        );
         return;
       }
-      router.replace(`/vault/${familyId}/captures/${jobId}`);
-      router.refresh();
+      router.replace(`/vault/${familyId}/recipes/${outcome.data.recipeId}`);
     });
   }
 

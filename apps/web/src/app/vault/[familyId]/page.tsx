@@ -98,14 +98,18 @@ export default async function VaultPage({ params }: Props) {
               const origin = people.find((person) => person.id === recipe.origin_person_id);
               return (
                 <li key={recipe.id}>
-                  <div className="flex h-full flex-col gap-1 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset">
+                  <Link
+                    href={`/vault/${familyId}/recipes/${recipe.id}`}
+                    className={`${interactiveCard} flex h-full min-h-tap-target flex-col gap-1`}
+                    data-testid="recipe-card"
+                  >
                     <span className="font-serif text-lg font-semibold">{recipe.title}</span>
                     {origin && (
                       <span className="text-sm text-muted">
                         {t("ui.recipeOf", { name: origin.relation_label ?? origin.display_name })}
                       </span>
                     )}
-                  </div>
+                  </Link>
                 </li>
               );
             })}

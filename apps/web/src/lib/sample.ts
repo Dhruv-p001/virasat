@@ -1,7 +1,7 @@
 import "server-only";
 import { existsSync } from "node:fs";
 import { join } from "node:path";
-import { type Ingredient, type SampleVault, sampleVault } from "@virasat/core";
+import { type SampleVault, sampleVault } from "@virasat/core";
 import type { TFunction } from "i18next";
 import { notFound } from "next/navigation";
 
@@ -32,14 +32,6 @@ export function sampleLabel(person: SamplePerson, t: TFunction): string {
 
 export function sampleLabelFor(slug: string, t: TFunction): string {
   return sampleLabel(getSamplePerson(slug), t);
-}
-
-/** "≈ 240 g whole-wheat flour", or null when the AI offered no quantity. Shown beside the words. */
-export function suggestionLine(ingredient: Ingredient, locale: string): string | null {
-  if (ingredient.suggested_quantity === null) return null;
-  const amount = new Intl.NumberFormat(locale).format(ingredient.suggested_quantity);
-  const unit = ingredient.suggested_unit ? ` ${ingredient.suggested_unit}` : "";
-  return `≈ ${amount}${unit}${ingredient.name ? ` ${ingredient.name}` : ""}`;
 }
 
 /** The recording only plays when the file has been added to public/sample (see pendingAssets). */

@@ -323,9 +323,6 @@
     "save": "Save the recipe",
     "saving": "Saving…",
     "check": "Please check",
-    "savedTitle": "Saved",
-    "saved": "“{{title}}” is now a recipe in your vault.",
-    "backToVault": "Back to the vault",
     "workingTitle": "Still working on it",
     "failedManual": "The computer couldn't turn this into a recipe. You can type it in below, using the original beside it.",
     "failedTimedOut": "This took too long and was stopped. You can type the recipe in below, using the original beside it.",
@@ -457,5 +454,26 @@
     "back": "Back to the example family",
     "ctaTitle": "Ready to keep your own family's recipes?",
     "ctaBody": "Start with one recipe you know by heart. It takes two minutes."
+  },
+  "recipe": {
+    "source": {
+      "voice": "Told aloud",
+      "handwriting": "Handwritten",
+      "typed": "Typed from memory",
+      "whatsapp": "Sent on WhatsApp"
+    },
+    "ingredients": "Ingredients, in their own words",
+    "steps": "Steps",
+    "tips": "Tips",
+    "story": "The story",
+    "handwriting": "The handwritten page",
+    "listen": "Listen to {{name}}",
+    "moments": "Moments",
+    "listenOriginal": "Listen to the original recording",
+    "serves": "Serves {{count}}",
+    "audioRemoved": "The original recording has been removed. The written recipe stays.",
+    "audioMissing": "The recording can't be played right now. Try again in a moment.",
+    "pageAlt": "Page {{n}}",
+    "pageNotShown": "Page {{n}} can't be shown in this browser. It is kept safely in the vault."
   }
 }

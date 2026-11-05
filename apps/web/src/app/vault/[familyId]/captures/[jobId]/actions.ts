@@ -17,7 +17,7 @@ export async function confirmReview(
   familyId: string,
   jobId: string,
   content: unknown,
-): Promise<ActionState> {
+): Promise<ActionState<{ recipeId: string }>> {
   assertUuid(familyId);
   assertUuid(jobId);
   const userId = await getUserId();
@@ -26,7 +26,7 @@ export async function confirmReview(
   const parsed = ReviewContentSchema.safeParse(content);
   if (!parsed.success) return { status: "error", message: "review.errors.form" };
 
-  const { error } = await createAdminClient().rpc("confirm_capture", {
+  const { data: recipeId, error } = await createAdminClient().rpc("confirm_capture", {
     p_actor: userId,
     p_job_id: jobId,
     p_content: parsed.data as unknown as Json,
@@ -38,5 +38,5 @@ export async function confirmReview(
     return { status: "error", message: "errors.generic" };
   }
   revalidatePath(`/vault/${familyId}`, "layout");
-  return { status: "success" };
+  return { status: "success", data: { recipeId } };
 }

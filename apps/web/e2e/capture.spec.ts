@@ -92,7 +92,16 @@ test("the organiser records in the app, reviews the draft and confirms it", asyn
   await firstWords.fill("mutthi bhar besan");
   await page.getByLabel("Suggested amount").first().fill("1,5");
   await page.getByRole("button", { name: "Save the recipe" }).click();
-  await expect(page.getByTestId("saved")).toContainText("Besan poda");
+  // Saving lands on the recipe itself: her voice to play, and her words beside each ingredient.
+  await expect(page.getByRole("heading", { level: 1, name: "Besan poda" })).toBeVisible();
+  await expect(page).toHaveURL(/\/recipes\/[0-9a-f-]{36}$/);
+  await expect(page.getByText("Recipe of Ba")).toBeVisible();
+  const audio = page.getByTestId("recipe-audio").locator("audio");
+  await expect(audio).toBeVisible();
+  await expect.poll(() => audio.evaluate((el: HTMLAudioElement) => el.duration)).toBeGreaterThan(0);
+  const firstIngredient = page.getByTestId("ingredients").getByRole("listitem").first();
+  await expect(firstIngredient).toContainText("“mutthi bhar besan”");
+  await expect(firstIngredient).toContainText("≈ 1.5");
 
   const { data: recipes } = await admin
     .from("recipes")
@@ -256,7 +265,17 @@ test("handwritten pages: originals kept as taken, a readable copy made, reviewed
   await expect(page.getByRole("img", { name: "Page 1" })).toBeVisible();
   await expect(page.getByText("What was read from the page")).toBeVisible();
   await page.getByRole("button", { name: "Save the recipe" }).click();
-  await expect(page.getByTestId("saved")).toBeVisible();
+  await expect(page.getByTestId("recipe-pages").getByRole("img", { name: "Page 1" })).toBeVisible();
+  // The page image really loads (the readable copy, signed for this viewer).
+  await expect
+    .poll(() =>
+      page
+        .getByTestId("recipe-pages")
+        .getByRole("img")
+        .first()
+        .evaluate((el: HTMLImageElement) => el.naturalWidth),
+    )
+    .toBeGreaterThan(0);
 
   const { data: recipe } = await admin
     .from("recipes")
@@ -362,7 +381,7 @@ test("a capture the computer gave up on opens empty for typing in, with what was
   await page.getByLabel("Name of the dish").fill("Dal tadka");
   await page.getByLabel("Ingredient 1: their words").fill("ek katori dal");
   await page.getByRole("button", { name: "Save the recipe" }).click();
-  await expect(page.getByTestId("saved")).toContainText("Dal tadka");
+  await expect(page.getByRole("heading", { level: 1, name: "Dal tadka" })).toBeVisible();
 
   const { data: recipe } = await admin
     .from("recipes")

@@ -5,10 +5,10 @@ import {
   reviewLanguage,
 } from "@virasat/core";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { AiModeBanner } from "@/components/ai-mode-banner.tsx";
 import { AutoRefresh } from "@/components/auto-refresh.tsx";
-import { ButtonLink, Card, Notice, PageShell } from "@/components/ui.tsx";
+import { Card, Notice, PageShell } from "@/components/ui.tsx";
 import { getCapture, getVault } from "@/lib/data.ts";
 import { getT } from "@/lib/i18n/server.ts";
 import { ReviewForm } from "./review-form.tsx";
@@ -36,17 +36,10 @@ export default async function ReviewPage({ params }: Props) {
   const name = capture.personName ?? t("captures.someone");
   const back = { href: `/vault/${familyId}/captures`, label: t("captures.title") };
 
+  // Already a recipe: the recipe is what to look at now.
   if (capture.status === "confirmed") {
-    return (
-      <PageShell title={t("review.savedTitle")} back={back}>
-        <Notice kind="success">
-          <span data-testid="saved">{t("review.saved", { title: capture.recipeTitle ?? "" })}</span>
-        </Notice>
-        <ButtonLink href={`/vault/${familyId}`} className="self-start">
-          {t("review.backToVault")}
-        </ButtonLink>
-      </PageShell>
-    );
+    if (!capture.recipeId) notFound();
+    redirect(`/vault/${familyId}/recipes/${capture.recipeId}`);
   }
 
   if (IN_PROGRESS.has(capture.status)) {

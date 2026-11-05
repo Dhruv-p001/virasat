@@ -1,3 +1,4 @@
+import { suggestionLine } from "@virasat/core";
 import { Avatar } from "@virasat/ui/avatar";
 import { Card, PhotoFrame } from "@virasat/ui/card";
 import { ButtonLink } from "@virasat/ui/link-button";
@@ -15,7 +16,6 @@ import {
   sampleLabel,
   sampleLabelFor,
   sampleVault,
-  suggestionLine,
 } from "@/lib/sample.ts";
 
 type Props = { params: Promise<{ slug: string }> };
