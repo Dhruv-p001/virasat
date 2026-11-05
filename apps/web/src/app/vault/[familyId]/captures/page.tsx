@@ -24,7 +24,7 @@ export default async function CapturesPage({ params }: Props) {
   return (
     <PageShell title={t("captures.title")} back={{ href: `/vault/${familyId}`, label: vault.name }}>
       <AiModeBanner />
-      <CaptureList captures={captures} />
+      <CaptureList familyId={familyId} captures={captures} />
     </PageShell>
   );
 }

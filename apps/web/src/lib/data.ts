@@ -1,4 +1,5 @@
 import "server-only";
+import { CaptureAiOutputSchema, readableMedia } from "@virasat/core";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import { z } from "zod";
@@ -158,3 +159,81 @@ export const listOpenCaptures = cache(async (familyId: string, limit = 50) => {
     personName: job.people ? (job.people.relation_label ?? job.people.display_name) : null,
   }));
 });
+
+const ORIGINAL_URL_SECONDS = 60 * 60;
+/** Page formats every browser can show. A HEIC page without its readable copy cannot be shown. */
+const DISPLAYABLE_PAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
+
+/**
+ * One capture for the review screen: where it has got to, what the computer made of it, and the
+ * original to listen to or look at beside it. Through RLS, so only writers of the vault get it:
+ * viewers and other families find nothing. The files are signed for an hour.
+ */
+export async function getCapture(familyId: string, jobId: string) {
+  assertUuid(familyId);
+  assertUuid(jobId);
+  const supabase = await createClient();
+  const { data: job, error } = await supabase
+    .from("capture_jobs")
+    .select(
+      "id, status, source_type, transcript, detected_language, ai_output, error, recipe_id, people(display_name, relation_label)",
+    )
+    .eq("id", jobId)
+    .eq("family_id", familyId)
+    .maybeSingle();
+  if (error) throw error;
+  // A capture still waiting for its files is not something to review yet.
+  if (!job || job.status === "awaiting_upload") notFound();
+
+  const { data: media, error: mediaError } = await supabase
+    .from("media")
+    .select("id, derived_from_media_id, storage_bucket, storage_path, mime_type, width, height")
+    .eq("capture_job_id", job.id)
+    .is("removed_at", null)
+    .order("created_at");
+  if (mediaError) throw mediaError;
+
+  // The recording, or each page as the reader saw it: its readable copy when it has one.
+  const shown = readableMedia(media);
+  const signed = await Promise.all(
+    shown.map(async (row) => {
+      if (job.source_type === "handwriting" && !DISPLAYABLE_PAGE_TYPES.has(row.mime_type)) {
+        return { ...row, url: null };
+      }
+      const { data } = await supabase.storage
+        .from(row.storage_bucket)
+        .createSignedUrl(row.storage_path, ORIGINAL_URL_SECONDS);
+      return { ...row, url: data?.signedUrl ?? null };
+    }),
+  );
+
+  let recipeTitle: string | null = null;
+  if (job.recipe_id) {
+    const { data: recipe } = await supabase
+      .from("recipes")
+      .select("title")
+      .eq("id", job.recipe_id)
+      .maybeSingle();
+    recipeTitle = recipe?.title ?? null;
+  }
+
+  const draft = CaptureAiOutputSchema.safeParse(job.ai_output);
+  return {
+    id: job.id,
+    status: job.status,
+    sourceType: job.source_type,
+    transcript: job.transcript,
+    detectedLanguage: job.detected_language,
+    /** The computer's draft. Null when there is none (the capture failed) or it can't be read. */
+    draft: draft.success ? draft.data : null,
+    failure: job.error,
+    recipeId: job.recipe_id,
+    recipeTitle,
+    personName: job.people ? (job.people.relation_label ?? job.people.display_name) : null,
+    audioUrl: job.source_type === "voice" ? (signed[0]?.url ?? null) : null,
+    pages:
+      job.source_type === "handwriting"
+        ? signed.map((row) => ({ url: row.url, width: row.width, height: row.height }))
+        : [],
+  };
+}

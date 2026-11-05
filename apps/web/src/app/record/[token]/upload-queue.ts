@@ -1,4 +1,5 @@
 import type { PendingUpload, UploadApi } from "@virasat/core";
+import { putToSignedUrl } from "@/lib/capture/storage-put.ts";
 import { confirmUpload, refreshUpload, startUpload } from "./actions.ts";
 
 // Browser side of the elder's upload: recordings wait in IndexedDB until the server has
@@ -89,23 +90,6 @@ export function sleepUntilOnline(ms: number): Promise<void> {
     const timer = setTimeout(done, ms);
     window.addEventListener("online", done);
   });
-}
-
-/** The recording goes to storage as a plain multipart PUT, as the storage client itself does. */
-async function putToSignedUrl(
-  url: string,
-  blob: Blob,
-  mime: string,
-): Promise<"ok" | "exists" | "expired"> {
-  const body = new FormData();
-  body.append("cacheControl", "3600");
-  // Plain mime type: the bucket's allow-list has no codec parameters.
-  body.append("", new Blob([blob], { type: mime }));
-  const response = await fetch(url, { method: "PUT", body });
-  if (response.ok) return "ok";
-  if (response.status === 409) return "exists";
-  if (response.status >= 400 && response.status < 500) return "expired";
-  throw new Error(`Upload failed (${response.status})`);
 }
 
 export const uploadApi: UploadApi<Blob> = {

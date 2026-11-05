@@ -49,7 +49,7 @@ export default async function VaultPage({ params }: Props) {
           }
         >
           <AiModeBanner />
-          <CaptureList captures={captures} />
+          <CaptureList familyId={familyId} captures={captures} />
         </Section>
       )}
 

@@ -61,6 +61,23 @@ export default async function PersonPage({ params }: Props) {
       )}
 
       {canWrite && (
+        <Section title={t("capture.sectionTitle")}>
+          <p className="text-muted">{t("capture.sectionIntro", { name: heading })}</p>
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href={`/vault/${familyId}/people/${personId}/capture`}>
+              {t("capture.recordAction", { name: heading })}
+            </ButtonLink>
+            <ButtonLink
+              href={`/vault/${familyId}/people/${personId}/capture?mode=pages`}
+              kind="secondary"
+            >
+              {t("capture.pagesAction")}
+            </ButtonLink>
+          </div>
+        </Section>
+      )}
+
+      {canWrite && (
         <Section title={t("recordingLinks.title")}>
           <p className="text-muted">{t("recordingLinks.intro", { name: heading })}</p>
           <RecordingLinkForm familyId={familyId} personId={personId} name={heading} />
