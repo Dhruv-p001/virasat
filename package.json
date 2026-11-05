@@ -13,6 +13,7 @@
     "typecheck": "turbo run typecheck",
     "lint": "turbo run lint",
     "test": "turbo run test",
+    "check:record-budget": "node scripts/check-record-budget.ts",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "db:start": "supabase start",

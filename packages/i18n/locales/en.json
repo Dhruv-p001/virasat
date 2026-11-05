@@ -348,5 +348,32 @@
       "form": "We couldn't save that. Please check the recipe and try again.",
       "notReady": "This was already saved, or isn't ready yet. Reload the page."
     }
+  },
+  "ui": {
+    "skipToContent": "Skip to content",
+    "loading": "Loading",
+    "nav": {
+      "label": "Main",
+      "vault": "Vault",
+      "add": "Add",
+      "moments": "Moments",
+      "you": "You"
+    },
+    "add": {
+      "title": "Add to your vault",
+      "description": "What would you like to do?",
+      "capture": "Record or photograph a recipe",
+      "captureHint": "Start from the person it comes from.",
+      "person": "Add a person",
+      "personHint": "Someone whose recipes belong here.",
+      "invite": "Invite family",
+      "inviteHint": "Send a link to join this vault."
+    }
+  },
+  "moments": {
+    "title": "Moments",
+    "emptyTitle": "Nothing cooked yet",
+    "emptyBody": "When someone in your family cooks one of these recipes and shares a photo or a note, it shows up here, for your family only.",
+    "emptyAction": "Go to your vault"
   }
 }

@@ -22,6 +22,7 @@
 > - **0012:** An elder's recording stays in IndexedDB until the server confirms it. Uploads go straight to storage by signed URL and are retried whole, reusing the same capture. `confirm_upload` marks a job uploaded.
 > - **0013:** Captures are processed by an Inngest pipeline in `jobs/` (transcribe, structure). Only `advance_capture()` moves a job. With no API keys it runs deterministic mock providers behind a visible banner (`AI_MODE`). Steps never return recipe content.
 > - **0014:** The organiser records or photographs in the app through the same retry-until-confirmed upload. Handwriting holds up to four pages, each with a browser-made readable copy (`derived_scan`) that the reader takes; the original is never changed. `add_capture_media()` registers them. A person reviews and edits the draft, and only `confirm_capture` makes a recipe.
+> - **0015:** UI is `@virasat/ui` on shadcn/ui (Radix), Vaul, Sonner, Motion and lucide-react, imported by path. `/record` imports only `@virasat/ui/avatar` and has a CI JavaScript budget (`pnpm check:record-budget`).
 > - **Consent:** wording version `2026-11-v1` (`docs/consent.md`, i18n `consent.*`). Each sentence is a promise with conditions that must stay true.
 > - **Recording limit:** 10 minutes per recording (`MAX_RECORDING_SECONDS` in `packages/core`).
 > - The full data model is in `docs/schema.md`. Soft deletes go through SQL functions (e.g. `remove_person()`), never direct `deleted_at` writes.

@@ -2,7 +2,6 @@ import { resources } from "@virasat/i18n";
 import { colors } from "@virasat/ui-tokens";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import { TopBar } from "@/components/top-bar.tsx";
 import { I18nProvider } from "@/lib/i18n/client.tsx";
 import { getT } from "@/lib/i18n/server.ts";
 import { fontVariables } from "./fonts.ts";
@@ -35,8 +34,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     <html lang={locale} dir={RTL_LOCALES.has(locale) ? "rtl" : "ltr"} className={fontVariables}>
       <body className="flex min-h-dvh flex-col antialiased">
         <I18nProvider key={locale} locale={locale} messages={resources[locale].translation}>
-          <TopBar />
-          <div className="flex flex-1 flex-col">{children}</div>
+          {children}
         </I18nProvider>
       </body>
     </html>

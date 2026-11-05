@@ -2,7 +2,7 @@
 
 import { formatTimer, runUpload, type UploadOutcome } from "@virasat/core";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Avatar } from "@/components/ui.tsx";
+import { Avatar } from "@virasat/ui/avatar";
 import { useVoiceRecorder } from "@/lib/capture/use-voice-recorder.ts";
 import { useT } from "@/lib/i18n/client.tsx";
 import {

@@ -88,7 +88,7 @@ export default async function PersonPage({ params }: Props) {
                 {links.map((link) => (
                   <li
                     key={link.id}
-                    className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface p-4"
+                    className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset"
                   >
                     <span className="flex flex-col text-sm text-muted">
                       <span>

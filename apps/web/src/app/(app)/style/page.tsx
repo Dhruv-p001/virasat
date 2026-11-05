@@ -1,7 +1,15 @@
 import { colors, type ColorName } from "@virasat/ui-tokens";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Button } from "@virasat/ui/button";
+import { Card, interactiveCard, PhotoFrame } from "@virasat/ui/card";
+import { ConfirmMoment } from "@virasat/ui/confirm-moment";
+import { EmptyState } from "@virasat/ui/empty-state";
+import { Notice } from "@virasat/ui/notice";
+import { Skeleton, SkeletonRegion } from "@virasat/ui/skeleton";
+import { Mic } from "lucide-react";
 import type { ReactNode } from "react";
+import { StyleInteractive } from "./interactive.tsx";
 
 // Design review page: every token and core pattern, in light and dark, in all three launch scripts.
 // Not part of the product; hidden in production.
@@ -118,14 +126,48 @@ function Specimen({ theme }: { theme: "light" | "dark" }) {
         </Section>
 
         <Section title="Empty state">
-          <div className="flex flex-col items-start gap-3 rounded-lg border border-dashed border-outline px-5 py-8">
-            <h3 className="text-xl">Record your first family recipe</h3>
-            <p className="text-muted">
-              Sit with someone who cooks from memory, or send them a link to record from their own
-              phone.
-            </p>
-            <Button kind="primary">Start recording</Button>
+          <EmptyState
+            icon={<Mic />}
+            title="Record your first family recipe"
+            body="Sit with someone who cooks from memory, or send them a link to record from their own phone."
+            action={<Button kind="primary">Start recording</Button>}
+          />
+        </Section>
+
+        <Section title="Album surfaces">
+          <div className="grid grid-cols-2 gap-4">
+            <Card className="flex flex-col gap-1">
+              <span className="font-serif text-lg font-semibold">Card</span>
+              <span className="text-sm text-muted">Warm page, soft edge</span>
+            </Card>
+            <a href="#top" className={`${interactiveCard} flex flex-col gap-1`}>
+              <span className="font-serif text-lg font-semibold">Link card</span>
+              <span className="text-sm text-muted">Lifts on hover</span>
+            </a>
           </div>
+          <PhotoFrame className="max-w-48">
+            <div className="flex h-32 items-center justify-center rounded-sm bg-sunken font-serif text-3xl text-accent">
+              Ba
+            </div>
+          </PhotoFrame>
+          <Button kind="primary" size="elder">
+            Elder-sized button
+          </Button>
+        </Section>
+
+        <Section title="Loading, notices and confirm">
+          <SkeletonRegion label="Loading the recipe" className="flex flex-col gap-3">
+            <Skeleton className="h-6 w-2/3" />
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-5/6" />
+          </SkeletonRegion>
+          <Notice kind="success">Saved to the vault.</Notice>
+          <Notice kind="error">We couldn’t save that. Please try again.</Notice>
+          <ConfirmMoment title="Recipe saved" />
+        </Section>
+
+        <Section title="Sheet, dialog, menu, tabs and toast">
+          <StyleInteractive />
         </Section>
 
         <Section title="Palette">
@@ -239,26 +281,6 @@ function Ingredient({
         {suggestion}
       </span>
     </li>
-  );
-}
-
-function Button({
-  kind,
-  children,
-}: {
-  kind: "primary" | "secondary" | "quiet" | "danger";
-  children: ReactNode;
-}) {
-  const styles = {
-    primary: "bg-accent text-accent-ink",
-    secondary: "border-2 border-outline",
-    quiet: "text-accent underline underline-offset-4",
-    danger: "border-2 border-danger text-danger",
-  }[kind];
-  return (
-    <button type="button" className={`min-h-tap-target rounded-full px-5 font-semibold ${styles}`}>
-      {children}
-    </button>
   );
 }
 

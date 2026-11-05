@@ -1,5 +1,7 @@
 import { canManageMembers, canWriteContent } from "@virasat/core";
 import type { Metadata } from "next";
+import { interactiveCard } from "@virasat/ui/card";
+import { ChevronRight, Users } from "lucide-react";
 import Link from "next/link";
 import { AiModeBanner } from "@/components/ai-mode-banner.tsx";
 import { CaptureList } from "@/components/capture-list.tsx";
@@ -26,6 +28,7 @@ export default async function VaultPage({ params }: Props) {
   return (
     <PageShell
       title={vault.name}
+      eyebrow={t("vault.yourRole", { role: t(`roles.${vault.role}`) })}
       actions={
         canManageMembers(vault.role) ? (
           <ButtonLink href={`/vault/${familyId}/invite`} kind="secondary">
@@ -34,8 +37,6 @@ export default async function VaultPage({ params }: Props) {
         ) : undefined
       }
     >
-      <p className="-mt-6 text-muted">{t("vault.yourRole", { role: t(`roles.${vault.role}`) })}</p>
-
       {captures.length > 0 && (
         <Section
           title={t("captures.title")}
@@ -54,6 +55,7 @@ export default async function VaultPage({ params }: Props) {
       )}
 
       <Section
+        id="people"
         title={t("vault.people")}
         action={
           canWrite && people.length > 0 ? (
@@ -68,6 +70,7 @@ export default async function VaultPage({ params }: Props) {
       >
         {people.length === 0 ? (
           <EmptyState
+            icon={<Users />}
             title={t("vault.peopleEmptyTitle")}
             body={t("vault.peopleEmptyBody")}
             action={
@@ -79,22 +82,23 @@ export default async function VaultPage({ params }: Props) {
             }
           />
         ) : (
-          <ul className="grid gap-3 sm:grid-cols-2">
+          <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3">
             {people.map((person) => (
               <li key={person.id}>
                 <Link
                   href={`/vault/${familyId}/people/${person.id}`}
-                  className="flex items-center gap-4 rounded-lg bg-surface p-4"
+                  className={`${interactiveCard} flex h-full flex-col items-center gap-3 text-center`}
                 >
                   <Avatar
                     name={person.relation_label ?? person.display_name}
                     photoUrl={person.photoUrl}
+                    size="lg"
                   />
                   <span className="flex min-w-0 flex-col">
-                    <span className="truncate text-lg font-semibold">
+                    <span className="truncate font-serif text-lg font-semibold">
                       {person.relation_label ?? person.display_name}
                     </span>
-                    <span className="truncate text-muted">
+                    <span className="truncate text-sm text-muted">
                       {person.relation_label ? person.display_name : null}
                       {person.relation_label && person.profile_id ? " · " : null}
                       {person.profile_id ? t("vault.hasJoined") : null}
@@ -109,9 +113,10 @@ export default async function VaultPage({ params }: Props) {
 
       <Link
         href={`/vault/${familyId}/members`}
-        className="self-start text-accent underline underline-offset-4"
+        className="flex min-h-tap-target items-center gap-1 self-start font-semibold text-accent underline underline-offset-4"
       >
         {t("vault.members")}
+        <ChevronRight aria-hidden className="size-4 rtl:rotate-180" />
       </Link>
     </PageShell>
   );
