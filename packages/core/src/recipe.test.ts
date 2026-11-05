@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { IngredientSchema, StructuredRecipeSchema } from "./recipe.ts";
+import { IngredientSchema, StructuredRecipeSchema, suggestionLine } from "./recipe.ts";
 
 const ingredient = {
   original_text: "mutthi bhar besan",
@@ -55,5 +55,29 @@ describe("StructuredRecipeSchema", () => {
     expect(
       StructuredRecipeSchema.safeParse({ ...recipe, uncertain_fields: ["ingredients.0"] }).success,
     ).toBe(false);
+  });
+});
+
+describe("suggestionLine", () => {
+  it("shows the suggested amount, unit and name beside the words", () => {
+    expect(suggestionLine(ingredient, "en")).toBe("≈ 30 g besan");
+    expect(
+      suggestionLine({ ...ingredient, suggested_quantity: 1.5, suggested_unit: null }, "en"),
+    ).toBe("≈ 1.5 besan");
+  });
+
+  it("formats the number for the viewer's language", () => {
+    expect(suggestionLine({ ...ingredient, suggested_quantity: 1500 }, "en")).toBe(
+      "≈ 1,500 g besan",
+    );
+    expect(suggestionLine({ ...ingredient, suggested_quantity: 1500 }, "hi")).toContain("1,500");
+  });
+
+  it("says nothing when no quantity was suggested", () => {
+    expect(suggestionLine({ ...ingredient, suggested_quantity: null }, "en")).toBeNull();
+  });
+
+  it("leaves the name off when there is none", () => {
+    expect(suggestionLine({ ...ingredient, name: null }, "en")).toBe("≈ 30 g");
   });
 });

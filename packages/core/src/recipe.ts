@@ -36,3 +36,14 @@ export const StructuredRecipeSchema = z.object({
   uncertain_fields: z.array(z.string().startsWith("/")),
 });
 export type StructuredRecipe = z.infer<typeof StructuredRecipeSchema>;
+
+/**
+ * "≈ 240 g whole-wheat flour", or null when no quantity was suggested. Shown beside the speaker's
+ * words, never instead of them.
+ */
+export function suggestionLine(ingredient: Ingredient, locale: string): string | null {
+  if (ingredient.suggested_quantity === null) return null;
+  const amount = new Intl.NumberFormat(locale).format(ingredient.suggested_quantity);
+  const unit = ingredient.suggested_unit ? ` ${ingredient.suggested_unit}` : "";
+  return `≈ ${amount}${unit}${ingredient.name ? ` ${ingredient.name}` : ""}`;
+}

@@ -207,16 +207,6 @@ export async function getCapture(familyId: string, jobId: string) {
     }),
   );
 
-  let recipeTitle: string | null = null;
-  if (job.recipe_id) {
-    const { data: recipe } = await supabase
-      .from("recipes")
-      .select("title")
-      .eq("id", job.recipe_id)
-      .maybeSingle();
-    recipeTitle = recipe?.title ?? null;
-  }
-
   const draft = CaptureAiOutputSchema.safeParse(job.ai_output);
   return {
     id: job.id,
@@ -228,7 +218,6 @@ export async function getCapture(familyId: string, jobId: string) {
     draft: draft.success ? draft.data : null,
     failure: job.error,
     recipeId: job.recipe_id,
-    recipeTitle,
     personName: job.people ? (job.people.relation_label ?? job.people.display_name) : null,
     audioUrl: job.source_type === "voice" ? (signed[0]?.url ?? null) : null,
     pages:
