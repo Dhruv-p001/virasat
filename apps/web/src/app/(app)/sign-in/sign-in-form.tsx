@@ -183,7 +183,7 @@ export function SignInForm({
               setError(null);
             }}
             className={`min-h-tap-target rounded-full font-semibold ${
-              method === option ? "bg-surface text-ink shadow-sm" : "text-muted"
+              method === option ? "bg-surface text-ink shadow-album" : "text-muted"
             }`}
           >
             {t(option === "email" ? "signIn.emailTab" : "signIn.phoneTab")}

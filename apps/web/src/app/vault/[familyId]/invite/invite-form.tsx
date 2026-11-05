@@ -82,7 +82,7 @@ function InviteFormRound({
         {CHANNELS.map((option) => (
           <label
             key={option}
-            className="flex cursor-pointer items-start gap-3 rounded-lg bg-surface p-4 has-checked:outline-2 has-checked:outline-accent"
+            className="flex cursor-pointer items-start gap-3 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset has-checked:outline-2 has-checked:outline-accent"
           >
             <input
               type="radio"
@@ -137,7 +137,7 @@ function InviteFormRound({
         {ROLES.map((role) => (
           <label
             key={role}
-            className="flex cursor-pointer items-start gap-3 rounded-lg bg-surface p-4 has-checked:outline-2 has-checked:outline-accent"
+            className="flex cursor-pointer items-start gap-3 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset has-checked:outline-2 has-checked:outline-accent"
           >
             <input
               type="radio"
@@ -189,7 +189,7 @@ function InviteReady({
   const whatsapp = `https://wa.me/?text=${encodeURIComponent(t("invite.whatsappText", { url: invite.url }))}`;
 
   return (
-    <div className="flex flex-col gap-5 rounded-lg bg-surface p-5">
+    <div className="flex flex-col gap-5 rounded-lg bg-surface p-5 shadow-album ring-1 ring-border ring-inset">
       <h2 className="text-xl">{t("invite.readyTitle")}</h2>
       <p className="text-muted">{t("invite.readyBody", { date: expires })}</p>
       <input

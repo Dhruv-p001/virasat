@@ -22,18 +22,20 @@ export default async function SignInPage({
 
   const { t, locale } = await getT();
   return (
-    <main className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-10">
+    <main id="main" className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-8 sm:py-12">
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold">{t("signIn.title")}</h1>
         <p className="text-lg text-muted">{t("signIn.subtitle")}</p>
       </header>
-      <SignInForm
-        next={next}
-        locale={locale}
-        siteUrl={publicEnv.siteUrl}
-        oauthProviders={publicEnv.oauthProviders}
-        initialError={error === "link" ? "signIn.linkExpired" : null}
-      />
+      <div className="rounded-lg bg-surface p-5 shadow-album ring-1 ring-border ring-inset">
+        <SignInForm
+          next={next}
+          locale={locale}
+          siteUrl={publicEnv.siteUrl}
+          oauthProviders={publicEnv.oauthProviders}
+          initialError={error === "link" ? "signIn.linkExpired" : null}
+        />
+      </div>
       <p className="text-sm text-muted">{t("signIn.privacy")}</p>
     </main>
   );

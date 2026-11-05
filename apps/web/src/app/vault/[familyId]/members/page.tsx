@@ -42,7 +42,7 @@ export default async function MembersPage({ params }: Props) {
           return (
             <li
               key={member.profileId}
-              className="flex flex-wrap items-center gap-4 rounded-lg bg-surface p-4"
+              className="flex flex-wrap items-center gap-4 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset"
             >
               <Avatar name={member.displayName} />
               <div className="flex min-w-0 flex-1 flex-col">
@@ -94,7 +94,7 @@ export default async function MembersPage({ params }: Props) {
               {invites.map((invite) => (
                 <li
                   key={invite.id}
-                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface p-4"
+                  className="flex flex-wrap items-center justify-between gap-3 rounded-lg bg-surface p-4 shadow-album ring-1 ring-border ring-inset"
                 >
                   <span className="flex flex-col">
                     <span className="font-medium">

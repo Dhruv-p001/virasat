@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "@virasat/ui-tokens/theme.css";
+@import "@virasat/ui/styles.css";
 
 @theme inline {
   --font-sans:
