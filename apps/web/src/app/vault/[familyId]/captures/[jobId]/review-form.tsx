@@ -105,7 +105,7 @@ export function ReviewForm(props: Props) {
         );
         return;
       }
-      router.replace(`/vault/${familyId}/recipes/${outcome.data.recipeId}`);
+      router.replace(`/vault/${familyId}/recipes/${outcome.data.recipeId}?saved=1`);
     });
   }
 

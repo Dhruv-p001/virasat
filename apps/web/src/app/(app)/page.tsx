@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { interactiveCard } from "@virasat/ui/card";
+import { Card, interactiveCard } from "@virasat/ui/card";
+import { FamilyArt, MicArt, PageArt } from "@virasat/ui/illustrations";
+import { Reveal } from "@virasat/ui/reveal";
 import { ChevronRight } from "lucide-react";
 import { ButtonLink, PageShell } from "@/components/ui.tsx";
 import { getUserId } from "@/lib/auth.ts";
@@ -39,24 +41,56 @@ export default async function HomePage() {
   return (
     <main
       id="main"
-      className="mx-auto grid w-full max-w-5xl flex-1 items-center gap-12 px-4 py-10 md:grid-cols-2 md:py-16"
+      className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-16 px-4 py-10 md:py-16"
     >
-      <div className="flex flex-col gap-6">
-        <h1 className="text-3xl font-semibold sm:text-[2.75rem] sm:leading-tight">
-          {t("landing.headline")}
-        </h1>
-        <p className="max-w-prose text-lg leading-relaxed text-muted">{t("landing.body")}</p>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/sign-in">{t("landing.getStarted")}</ButtonLink>
-          <ButtonLink href="/sample" kind="secondary">
-            {t("sample.exploreLink")}
-          </ButtonLink>
-          <ButtonLink href="/sign-in" kind="quiet">
-            {t("landing.signIn")}
-          </ButtonLink>
+      <div className="grid items-center gap-12 md:grid-cols-2">
+        <div className="flex flex-col gap-6">
+          <h1 className="text-3xl font-semibold sm:text-[2.75rem] sm:leading-tight">
+            {t("landing.headline")}
+          </h1>
+          <p className="max-w-prose text-lg leading-relaxed text-muted">{t("landing.body")}</p>
+          <div className="flex flex-wrap gap-3">
+            <ButtonLink href="/sign-in">{t("landing.getStarted")}</ButtonLink>
+            <ButtonLink href="/sample" kind="secondary">
+              {t("sample.exploreLink")}
+            </ButtonLink>
+            <ButtonLink href="/sign-in" kind="quiet">
+              {t("landing.signIn")}
+            </ButtonLink>
+          </div>
         </div>
+        <AlbumSpread />
       </div>
-      <AlbumSpread />
+
+      <section aria-labelledby="how-it-works" className="flex flex-col gap-6">
+        <div className="flex flex-col gap-3">
+          <h2 id="how-it-works" className="text-2xl sm:text-3xl">
+            {t("landing.how.title")}
+          </h2>
+          <div aria-hidden className="rule-motif w-28" />
+        </div>
+        <ul className="grid gap-4 md:grid-cols-3">
+          {(
+            [
+              [MicArt, "record"],
+              [PageArt, "photograph"],
+              [FamilyArt, "keep"],
+            ] as const
+          ).map(([Art, step], index) => (
+            <li key={step}>
+              <Reveal index={index} className="h-full">
+                <Card className="flex h-full flex-col gap-3 shadow-album" data-testid="how-step">
+                  <div className="mx-auto w-40">
+                    <Art />
+                  </div>
+                  <h3 className="text-xl">{t(`landing.how.${step}.title`)}</h3>
+                  <p className="text-muted">{t(`landing.how.${step}.body`)}</p>
+                </Card>
+              </Reveal>
+            </li>
+          ))}
+        </ul>
+      </section>
     </main>
   );
 }

@@ -73,3 +73,18 @@ export const radius = {
   lg: 20,
   full: 9999,
 } as const;
+
+/**
+ * The page backdrop (ADR 0018): a soft accent glow in two corners and a faint paper grain, behind
+ * every page. These numbers are the ceiling the CSS in apps/web/src/app/globals.css may not pass,
+ * so text keeps its contrast over the worst spot of it. Tests check both the contrast and the CSS.
+ */
+export const backdrop = {
+  /** The two corner glows, as a percentage of the accent colour. */
+  glowPercent: [5, 4],
+  /** The grain's speck colour (r, g, b) and the most opaque a speck can be, 0 to 1. */
+  grain: {
+    light: { rgb: [92, 69, 46], maxAlpha: 0.08 },
+    dark: { rgb: [242, 219, 189], maxAlpha: 0.08 },
+  },
+} as const;

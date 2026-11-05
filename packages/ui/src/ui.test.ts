@@ -1,4 +1,4 @@
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
@@ -6,7 +6,9 @@ import { Avatar, initials } from "./avatar.tsx";
 import { Button, buttonClass } from "./button.tsx";
 import { cn } from "./cn.ts";
 import { EmptyState } from "./empty-state.tsx";
+import { FamilyArt, MicArt, PageArt, PotArt, QuietArt, RecipeArt } from "./illustrations.tsx";
 import { currentHref } from "./nav.tsx";
+import { Reveal } from "./reveal.tsx";
 import { Skeleton, SkeletonRegion } from "./skeleton.tsx";
 
 describe("cn", () => {
@@ -90,5 +92,70 @@ describe("navigation", () => {
   it("highlights nothing off the map, and does not match prefixes of other words", () => {
     expect(currentHref("/elsewhere", items)).toBeNull();
     expect(currentHref("/vault/ab", items)).toBeNull();
+  });
+});
+
+describe("illustrations", () => {
+  const scenes = { MicArt, PageArt, FamilyArt, RecipeArt, PotArt, QuietArt };
+
+  it.each(Object.entries(scenes))(
+    "%s is decoration: hidden from screen readers",
+    (_name, Scene) => {
+      const html = renderToStaticMarkup(createElement(Scene));
+      expect(html).toContain('aria-hidden="true"');
+      expect(html).toContain('focusable="false"');
+      expect(html).not.toContain("<title");
+    },
+  );
+
+  it.each(Object.entries(scenes))("%s takes every colour from the theme", (_name, Scene) => {
+    const html = renderToStaticMarkup(createElement(Scene));
+    // A hard-coded colour would not follow dark mode.
+    expect(html).not.toMatch(/#[0-9a-f]{3,8}\b/i);
+    expect(html).not.toMatch(/(?:fill|stroke)="(?!none)[a-z]/i);
+    expect(html).toMatch(/fill-(?:accent|sunken|surface|ink)/);
+  });
+
+  it("are plain server-safe SVG with nothing heavy to ship", () => {
+    const source = readFileSync(new URL("./illustrations.tsx", import.meta.url), "utf8");
+    expect(source).not.toContain('"use client"');
+    const imports = [...source.matchAll(/^import .* from "(.+)";$/gm)].map((match) => match[1]);
+    expect(imports).toEqual(["react", "./cn.ts"]);
+  });
+
+  it("are never imported by the elder's recording page", () => {
+    const dir = new URL("../../../apps/web/src/app/record/", import.meta.url);
+    const files = readdirSync(dir, { recursive: true, encoding: "utf8" }).filter((file) =>
+      /\.tsx?$/.test(file),
+    );
+    expect(files.length).toBeGreaterThan(0);
+    for (const file of files) {
+      const source = readFileSync(new URL(file, dir), "utf8");
+      expect(source, file).not.toMatch(/@virasat\/ui\/(illustrations|reveal)/);
+    }
+  });
+});
+
+describe("empty state with an illustration", () => {
+  it("shows the scene, hidden from screen readers, in place of the icon", () => {
+    const html = renderToStaticMarkup(
+      createElement(EmptyState, {
+        title: "Nothing yet",
+        body: "Add one.",
+        icon: createElement("i", { className: "icon" }),
+        illustration: createElement(QuietArt),
+      }),
+    );
+    expect(html).toContain("<svg");
+    expect(html).not.toContain('class="icon"');
+    expect(html).toContain("Nothing yet");
+  });
+});
+
+describe("Reveal", () => {
+  it("carries its place in the page for the stagger", () => {
+    const html = renderToStaticMarkup(createElement(Reveal, { index: 3, children: "x" }));
+    expect(html).toContain("--i:3");
+    expect(html).toContain("reveal");
   });
 });

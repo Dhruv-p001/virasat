@@ -1,4 +1,5 @@
 import { safeNextPath } from "@virasat/core";
+import { PotArt } from "@virasat/ui/illustrations";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getUserId } from "@/lib/auth.ts";
@@ -23,6 +24,9 @@ export default async function SignInPage({
   const { t, locale } = await getT();
   return (
     <main id="main" className="mx-auto flex w-full max-w-md flex-col gap-6 px-4 py-8 sm:py-12">
+      <div aria-hidden className="mx-auto w-32 sm:w-40">
+        <PotArt />
+      </div>
       <header className="flex flex-col gap-2">
         <h1 className="text-3xl font-semibold">{t("signIn.title")}</h1>
         <p className="text-lg text-muted">{t("signIn.subtitle")}</p>

@@ -1,5 +1,6 @@
 import { canWriteContent } from "@virasat/core";
 import { Card } from "@virasat/ui/card";
+import { RecipeArt } from "@virasat/ui/illustrations";
 import { Camera, Mic } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -35,6 +36,11 @@ export default async function NewRecipePage({ params, searchParams }: Props) {
       eyebrow={vault.name}
       back={first ? undefined : { href: `/vault/${familyId}`, label: vault.name }}
     >
+      {first && (
+        <div aria-hidden className="-mt-2 w-36">
+          <RecipeArt />
+        </div>
+      )}
       <p className="-mt-4 max-w-prose text-lg text-muted">{t("ui.firstRecipe.body")}</p>
       <TypedRecipeForm
         familyId={familyId}

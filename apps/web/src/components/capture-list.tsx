@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { MicArt } from "@virasat/ui/illustrations";
 import { AutoRefresh } from "@/components/auto-refresh.tsx";
 import { Card, EmptyState } from "@/components/ui.tsx";
 import type { listOpenCaptures } from "@/lib/data.ts";
@@ -19,7 +20,13 @@ export async function CaptureList({
   const { t } = await getT();
 
   if (captures.length === 0) {
-    return <EmptyState title={t("captures.emptyTitle")} body={t("captures.emptyBody")} />;
+    return (
+      <EmptyState
+        illustration={<MicArt />}
+        title={t("captures.emptyTitle")}
+        body={t("captures.emptyBody")}
+      />
+    );
   }
 
   function title(capture: Capture): string {

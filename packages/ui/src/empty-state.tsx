@@ -7,6 +7,7 @@ export function EmptyState({
   body,
   action,
   icon,
+  illustration,
   className,
 }: {
   title: string;
@@ -14,6 +15,8 @@ export function EmptyState({
   action?: ReactNode;
   /** A decorative icon element, e.g. `<Mic />`. */
   icon?: ReactNode;
+  /** A larger decorative scene from `@virasat/ui/illustrations`. Shown in place of the icon. */
+  illustration?: ReactNode;
   className?: string;
 }) {
   return (
@@ -23,13 +26,19 @@ export function EmptyState({
         className,
       )}
     >
-      {icon && (
-        <span
-          aria-hidden
-          className="flex size-12 items-center justify-center rounded-full bg-sunken text-accent [&_svg]:size-6"
-        >
-          {icon}
-        </span>
+      {illustration ? (
+        <div aria-hidden className="-mt-2 w-36 sm:w-44">
+          {illustration}
+        </div>
+      ) : (
+        icon && (
+          <span
+            aria-hidden
+            className="flex size-12 items-center justify-center rounded-full bg-sunken text-accent [&_svg]:size-6"
+          >
+            {icon}
+          </span>
+        )
       )}
       <h3 className="text-xl">{title}</h3>
       <p className="max-w-prose text-muted">{body}</p>
