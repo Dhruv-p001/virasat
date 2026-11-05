@@ -1,3 +1,4 @@
+import { FamilyArt } from "@virasat/ui/illustrations";
 import type { Metadata } from "next";
 import { PageShell } from "@/components/ui.tsx";
 import { requireUserId } from "@/lib/auth.ts";
@@ -14,6 +15,9 @@ export default async function OnboardingPage() {
   const { t } = await getT();
   return (
     <PageShell title={t("onboarding.title")}>
+      <div aria-hidden className="-mt-2 w-40">
+        <FamilyArt />
+      </div>
       <p className="text-lg text-muted">{t("onboarding.body")}</p>
       <CreateVaultForm />
     </PageShell>

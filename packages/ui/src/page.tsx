@@ -31,6 +31,7 @@ export function PageHeader({
         <h1 className="text-2xl font-semibold sm:text-3xl">{title}</h1>
         {actions}
       </div>
+      <div aria-hidden className="rule-motif mt-1 w-28" />
     </header>
   );
 }

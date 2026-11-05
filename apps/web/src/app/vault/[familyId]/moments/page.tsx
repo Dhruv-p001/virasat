@@ -1,5 +1,5 @@
 import { canManageMembers, canWriteContent } from "@virasat/core";
-import { Camera } from "lucide-react";
+import { PotArt } from "@virasat/ui/illustrations";
 import type { Metadata } from "next";
 import { ActionButton } from "@/components/action-button.tsx";
 import { CookedSheet } from "@/components/cooked-sheet.tsx";
@@ -38,7 +38,7 @@ export default async function MomentsPage({ params }: Props) {
     >
       {moments.length === 0 ? (
         <EmptyState
-          icon={<Camera />}
+          illustration={<PotArt />}
           title={t("moments.emptyTitle")}
           body={recipes.length > 0 || !canWrite ? t("moments.emptyBody") : t("moments.noRecipes")}
           action={

@@ -95,6 +95,9 @@ test("the organiser records in the app, reviews the draft and confirms it", asyn
   // Saving lands on the recipe itself: her voice to play, and her words beside each ingredient.
   await expect(page.getByRole("heading", { level: 1, name: "Besan poda" })).toBeVisible();
   await expect(page).toHaveURL(/\/recipes\/[0-9a-f-]{36}$/);
+  // A check settles in once, and the "just saved" marker leaves the address.
+  await expect(page.getByRole("status").filter({ hasText: "Recipe saved" })).toBeVisible();
+  await expect(page).not.toHaveURL(/saved=1/);
   await expect(page.getByText("Recipe of Ba")).toBeVisible();
   const audio = page.getByTestId("recipe-audio").locator("audio");
   await expect(audio).toBeVisible();

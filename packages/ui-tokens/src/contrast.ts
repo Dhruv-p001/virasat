@@ -13,3 +13,15 @@ function luminance(hex: string): number {
   }) as [number, number, number];
   return 0.2126 * r + 0.7152 * g + 0.0722 * b;
 }
+
+/** `foreground` laid over `background` at `alpha` (0 to 1), as #RRGGBB. For checking text over a tint. */
+export function blend(foreground: string, background: string, alpha: number): string {
+  const channels = (hex: string) => {
+    const match = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i.exec(hex);
+    if (!match) throw new Error(`Expected #RRGGBB, got ${hex}`);
+    return match.slice(1).map((part) => parseInt(part, 16)) as [number, number, number];
+  };
+  const [f, b] = [channels(foreground), channels(background)];
+  const mixed = f.map((value, index) => Math.round(value * alpha + (b[index] ?? 0) * (1 - alpha)));
+  return `#${mixed.map((value) => value.toString(16).padStart(2, "0")).join("")}`;
+}

@@ -70,6 +70,65 @@
   animation: virasat-page-in 220ms ease-out both;
 }
 
+/* ---- Visual polish (ADR 0018) ---------------------------------------------------------------
+   Decoration only. Nothing here carries meaning, hides content, or runs under reduced motion
+   (the block at the end of this file stops every animation). */
+
+/* A printed border: a row of small diamonds, drawn as a mask so it takes the theme's accent. */
+@utility rule-motif {
+  height: 10px;
+  background-color: color-mix(in srgb, var(--color-accent) 50%, transparent);
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2210%22%3E%3Cpath%20d%3D%22M10%201l4%204-4%204-4-4z%22%2F%3E%3Ccircle%20cx%3D%221.5%22%20cy%3D%225%22%20r%3D%221%22%2F%3E%3Ccircle%20cx%3D%2218.5%22%20cy%3D%225%22%20r%3D%221%22%2F%3E%3C%2Fsvg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2220%22%20height%3D%2210%22%3E%3Cpath%20d%3D%22M10%201l4%204-4%204-4-4z%22%2F%3E%3Ccircle%20cx%3D%221.5%22%20cy%3D%225%22%20r%3D%221%22%2F%3E%3Ccircle%20cx%3D%2218.5%22%20cy%3D%225%22%20r%3D%221%22%2F%3E%3C%2Fsvg%3E");
+  -webkit-mask-repeat: repeat-x;
+  mask-repeat: repeat-x;
+  -webkit-mask-size: 20px 10px;
+  mask-size: 20px 10px;
+}
+
+/* Content settling in, one piece after another. Set --i on each piece (0, 1, 2 ...). */
+@utility reveal {
+  animation: virasat-page-in 380ms ease-out both;
+  animation-delay: calc(var(--i, 0) * 70ms);
+}
+
+/* A slow drift for steam in the illustrations. */
+@keyframes virasat-steam {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(-4px);
+    opacity: 0.45;
+  }
+}
+
+@utility steam {
+  animation: virasat-steam 3.2s ease-in-out infinite;
+}
+
+/* The bars beside a recording move only while it plays (data-playing on an ancestor). */
+@keyframes virasat-wave {
+  0%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@utility wave-bar {
+  transform-origin: 50% 50%;
+  transform: scaleY(0.65);
+  [data-playing="true"] & {
+    animation: virasat-wave 900ms ease-in-out infinite;
+    animation-delay: calc(var(--i, 0) * -110ms);
+  }
+}
+
 /* The one place reduced motion is enforced for CSS. Motion's own animations are covered by
    MotionConfig reducedMotion="user" in motion-provider.tsx. */
 @media (prefers-reduced-motion: reduce) {

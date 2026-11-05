@@ -1,2 +1,2 @@
 export * from "./tokens.ts";
-export { contrastRatio } from "./contrast.ts";
+export { blend, contrastRatio } from "./contrast.ts";

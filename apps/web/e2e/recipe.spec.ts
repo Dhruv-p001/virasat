@@ -147,6 +147,14 @@ test("a recording that was removed is said so, and the written recipe stays", as
   await expect.poll(() => audio.evaluate((el: HTMLAudioElement) => el.duration)).toBeGreaterThan(0);
   await expect(page.getByText("Hear Nani tell it", { exact: false })).toHaveCount(0);
 
+  // The bars beside the recording move only while it plays.
+  const player = page.getByTestId("recipe-audio").locator("[data-playing]");
+  await expect(player).toHaveAttribute("data-playing", "false");
+  await audio.evaluate((el: HTMLAudioElement) => el.dispatchEvent(new Event("play")));
+  await expect(player).toHaveAttribute("data-playing", "true");
+  await audio.evaluate((el: HTMLAudioElement) => el.dispatchEvent(new Event("pause")));
+  await expect(player).toHaveAttribute("data-playing", "false");
+
   // Consent withdrawn: the recording is gone, the text is not.
   const removed = await admin
     .from("media")

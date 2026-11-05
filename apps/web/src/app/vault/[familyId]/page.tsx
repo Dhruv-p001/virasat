@@ -1,7 +1,8 @@
 import { canManageMembers, canWriteContent } from "@virasat/core";
 import type { Metadata } from "next";
 import { interactiveCard } from "@virasat/ui/card";
-import { BookOpen, ChevronRight, Users } from "lucide-react";
+import { FamilyArt, RecipeArt } from "@virasat/ui/illustrations";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { AiModeBanner } from "@/components/ai-mode-banner.tsx";
 import { CaptureList } from "@/components/capture-list.tsx";
@@ -76,7 +77,7 @@ export default async function VaultPage({ params }: Props) {
       >
         {recipes.length === 0 ? (
           <EmptyState
-            icon={<BookOpen />}
+            illustration={<RecipeArt />}
             title={t("ui.firstRecipe.emptyTitle")}
             body={t("ui.firstRecipe.emptyBody")}
             action={
@@ -133,7 +134,7 @@ export default async function VaultPage({ params }: Props) {
       >
         {people.length === 0 ? (
           <EmptyState
-            icon={<Users />}
+            illustration={<FamilyArt />}
             title={t("vault.peopleEmptyTitle")}
             body={t("vault.peopleEmptyBody")}
             action={

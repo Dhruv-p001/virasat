@@ -18,7 +18,22 @@
     "headline": "Keep the recipes that live in their hands",
     "body": "Record Ba telling her recipe in her own words. Keep her voice, her handwriting and her stories, and pass them down.",
     "getStarted": "Get started",
-    "signIn": "I already have an account"
+    "signIn": "I already have an account",
+    "how": {
+      "title": "How it works",
+      "record": {
+        "title": "Record her voice",
+        "body": "Sit with her, or send a link she can open on any phone. There is nothing for her to install."
+      },
+      "photograph": {
+        "title": "Photograph her handwriting",
+        "body": "A diary page, a recipe card, a scrap of paper. The original photo is kept exactly as it was."
+      },
+      "keep": {
+        "title": "Keep it in her words",
+        "body": "Her own words stay beside every ingredient, and her voice stays with the recipe, for the whole family."
+      }
+    }
   },
   "signIn": {
     "title": "Sign in or create an account",
