@@ -4,7 +4,7 @@ import { createClient } from "@supabase/supabase-js";
 import { type Browser, expect, type Page, type TestInfo } from "@playwright/test";
 
 // Local Supabase test inbox (Mailpit) and the fixed test phone numbers from supabase/config.toml.
-const MAILPIT = `${process.env["MAILPIT_URL"] ?? "http://127.0.0.1:54324"}/api/v1`;
+const MAILPIT = `${process.env["MAILPIT_URL"] ?? "http://127.0.0.1:55324"}/api/v1`;
 export const TEST_PHONES = ["+15555550100", "+15555550101"] as const;
 const TEST_PHONE_CODE = "123456";
 

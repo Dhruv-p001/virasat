@@ -23,7 +23,45 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "capture_jobs": {
+            "attempts": {
+                  Row: {
+                    "author_profile_id": string | null,"cooked_on": string,"created_at": string,"deleted_at": string | null,"family_id": string,"id": string,"note": string | null,"photo_path": string | null,"rating": number | null,"recipe_id": string,"updated_at": string,"version_id": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author_profile_id"?: string | null,"cooked_on"?: string,"created_at"?: string,"deleted_at"?: string | null,"family_id": string,"id"?: string,"note"?: string | null,"photo_path"?: string | null,"rating"?: number | null,"recipe_id": string,"updated_at"?: string,"version_id"?: string | null
+                  }
+                  Update: {
+                    "author_profile_id"?: string | null,"cooked_on"?: string,"created_at"?: string,"deleted_at"?: string | null,"family_id"?: string,"id"?: string,"note"?: string | null,"photo_path"?: string | null,"rating"?: number | null,"recipe_id"?: string,"updated_at"?: string,"version_id"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "attempts_author_profile_id_fkey"
+      columns: ["author_profile_id"]
+isOneToOne: false
+      referencedRelation: "profiles"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attempts_family_id_fkey"
+      columns: ["family_id"]
+isOneToOne: false
+      referencedRelation: "families"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attempts_recipe_id_fkey"
+      columns: ["recipe_id"]
+isOneToOne: false
+      referencedRelation: "recipes"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "attempts_version_id_fkey"
+      columns: ["version_id"]
+isOneToOne: false
+      referencedRelation: "recipe_versions"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"capture_jobs": {
                   Row: {
                     "ai_output": Json | null,"contributor_link_id": string | null,"created_at": string,"created_by": string | null,"detected_language": string | null,"error": string | null,"family_id": string,"id": string,"person_id": string | null,"provider_meta": Json | null,"recipe_id": string | null,"source_type": Database["public"]['Enums']["source_type"],"status": Database["public"]['Enums']["capture_status"],"transcript": string | null,"updated_at": string
                   }
@@ -465,8 +503,14 @@ isOneToOne: false
 "create_invite":
 { Args: { "p_actor": string,"p_channel": Database["public"]['Enums']["invite_channel"],"p_email"?: string,"p_expires_in"?: string,"p_family_id": string,"p_person_id"?: string,"p_phone"?: string,"p_role": Database["public"]['Enums']["family_role"],"p_token": string }; Returns: string
                            },
+"create_typed_recipe":
+{ Args: { "p_actor": string,"p_content": Json,"p_family_id": string,"p_origin_person_id"?: string }; Returns: string
+                           },
 "publish_correction":
 { Args: { "p_actor": string,"p_change_note": string,"p_content": Json,"p_recipe_id": string }; Returns: string
+                           },
+"remove_moment":
+{ Args: { "p_attempt_id": string }; Returns: undefined
                            },
 "remove_person":
 { Args: { "p_person_id": string }; Returns: undefined

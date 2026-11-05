@@ -83,9 +83,19 @@ Rules:
 
 Share pages are served by the server, which validates the token, expiry and revocation and returns only that one version. There is no list endpoint.
 
-## v2 additions
+## Phase 2.5: moments and typed recipes (migration `moments_and_typed_recipes`)
 
-- `attempts`: `version_id`, `author_profile_id`, `notes`, `rating`, `cooked_on`, with photos as `media` rows.
+- **`attempts`** are family moments ("I cooked it"), moved into v1 from the v2 plan.
+  - Columns: `family_id`, `recipe_id`, optional `version_id`, `author_profile_id`, `note`, `rating` (1–5), `cooked_on`, and one `photo_path` at `{family_id}/moments/{attempt_id}/{file}` in `vault-images`.
+  - Moments are the member's own casual content, so they use ordinary RLS writes:
+    - owners, admins and members add moments as themselves
+    - authors edit their own
+    - whoever can read the recipe sees its moments (private recipes stay private)
+    - removal goes through `remove_moment()`, by the author or an owner or admin
+- **`create_typed_recipe(actor, family, content, origin_person)`** is service role only. It creates the quick first recipe with no recording: a confirmed original, `source_type = typed`, and nothing flagged as uncertain.
+
+## Later additions
+
 - `occasions` and `reminders`: birthdays and festivals that drive gentle prompts.
 
 ## Storage buckets
