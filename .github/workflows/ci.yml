@@ -28,7 +28,7 @@ jobs:
       - run: pnpm build
         env:
           # Build-time placeholders only; pages render per request against the real project.
-          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:54321
+          NEXT_PUBLIC_SUPABASE_URL: http://127.0.0.1:55321
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ci-build-placeholder-anon-key
 
   migrations:

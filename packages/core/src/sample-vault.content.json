@@ -1,0 +1,286 @@
+{
+  "familyName": "The Mehta family",
+  "viewer": {
+    "slug": "you",
+    "displayName": "You",
+    "relationLabel": "You",
+    "birthYear": null,
+    "photo": null,
+    "about": "Living in London, cooking from Ba's recipes on Sunday afternoons."
+  },
+  "people": [
+    {
+      "slug": "ba",
+      "displayName": "Kokila Mehta",
+      "relationLabel": "Ba",
+      "birthYear": 1939,
+      "photo": "/sample/people/ba.jpg",
+      "about": "Learned to cook in Jamnagar from her own Ba. Never measured anything in her life."
+    },
+    {
+      "slug": "mom",
+      "displayName": "Nisha Mehta",
+      "relationLabel": "Mom",
+      "birthYear": 1966,
+      "photo": "/sample/people/mom.jpg",
+      "about": "Carried Ba's recipes to Leicester in 1989, in a notebook and in her hands."
+    },
+    {
+      "slug": "masi",
+      "displayName": "Hema Shah",
+      "relationLabel": "Masi",
+      "birthYear": 1970,
+      "photo": "/sample/people/masi.jpg",
+      "about": "Keeps the family diary of festival sweets, written in Gujarati since 1984."
+    }
+  ],
+  "recipes": [
+    {
+      "slug": "methi-thepla",
+      "originPerson": "ba",
+      "source": "voice",
+      "audio": "/sample/audio/ba-methi-thepla.m4a",
+      "audioSeconds": 248,
+      "scan": null,
+      "dishPhoto": "/sample/dishes/methi-thepla.jpg",
+      "recipe": {
+        "title": "Methi na thepla",
+        "servings": 4,
+        "ingredients": [
+          {
+            "original_text": "be vaati ghau no lot",
+            "name": "whole-wheat flour",
+            "suggested_quantity": 240,
+            "suggested_unit": "g",
+            "confidence": 0.7,
+            "note": null
+          },
+          {
+            "original_text": "mutthi bhar besan",
+            "name": "gram flour",
+            "suggested_quantity": 30,
+            "suggested_unit": "g",
+            "confidence": 0.6,
+            "note": "One fistful"
+          },
+          {
+            "original_text": "ek juddi methi, jhini samareli",
+            "name": "fresh fenugreek leaves, finely chopped",
+            "suggested_quantity": 1,
+            "suggested_unit": "bunch",
+            "confidence": 0.8,
+            "note": null
+          },
+          {
+            "original_text": "be chamchi dahi",
+            "name": "yogurt",
+            "suggested_quantity": 30,
+            "suggested_unit": "g",
+            "confidence": 0.7,
+            "note": null
+          },
+          {
+            "original_text": "haldar, marchu, mithu andaaz thi",
+            "name": "turmeric, chilli powder, salt",
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": "To taste"
+          },
+          {
+            "original_text": "tel jarur pramane",
+            "name": "oil",
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": "As needed"
+          }
+        ],
+        "steps": [
+          { "text": "Mix the flours, methi, yogurt and spices. Add a little oil." },
+          {
+            "text": "Knead a soft dough with water, little by little, until it stops sticking to your hand."
+          },
+          { "text": "Rest the dough for fifteen minutes under a damp cloth." },
+          { "text": "Roll thin, cook on a hot tawa, and brush with oil when brown spots appear." }
+        ],
+        "tips": [
+          "If the methi is bitter, salt it and squeeze it first.",
+          "They keep for days, which is why we took them on every train."
+        ],
+        "story": "Every train journey to Rajkot started with a steel dabba of these, wrapped in newspaper. Ba would say: the dough should feel like your earlobe.",
+        "language": "gu",
+        "uncertain_fields": []
+      }
+    },
+    {
+      "slug": "kadhi",
+      "originPerson": "masi",
+      "source": "handwriting",
+      "audio": null,
+      "audioSeconds": null,
+      "scan": "/sample/scans/masi-kadhi.jpg",
+      "dishPhoto": "/sample/dishes/kadhi.jpg",
+      "recipe": {
+        "title": "Gujarati kadhi",
+        "servings": 4,
+        "ingredients": [
+          {
+            "original_text": "ek vaati khatu dahi",
+            "name": "sour yogurt",
+            "suggested_quantity": 250,
+            "suggested_unit": "g",
+            "confidence": 0.7,
+            "note": null
+          },
+          {
+            "original_text": "be chamcha besan",
+            "name": "gram flour",
+            "suggested_quantity": 20,
+            "suggested_unit": "g",
+            "confidence": 0.7,
+            "note": null
+          },
+          {
+            "original_text": "gol, nanu dalu",
+            "name": "jaggery",
+            "suggested_quantity": 15,
+            "suggested_unit": "g",
+            "confidence": 0.5,
+            "note": "A small lump"
+          },
+          {
+            "original_text": "aadu-marchu ni paste",
+            "name": "ginger and green chilli paste",
+            "suggested_quantity": 1,
+            "suggested_unit": "tsp",
+            "confidence": 0.6,
+            "note": null
+          },
+          {
+            "original_text": "vaghar: ghee, rai, jiru, limdo, tajj, lavang",
+            "name": "tempering: ghee, mustard seeds, cumin, curry leaves, cinnamon, cloves",
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": null
+          }
+        ],
+        "steps": [
+          { "text": "Whisk the yogurt, besan and three cups of water until smooth." },
+          {
+            "text": "Add jaggery and the ginger-chilli paste, and bring to a boil, stirring so it doesn't split."
+          },
+          { "text": "Simmer for ten minutes. Pour the hot vaghar over it." }
+        ],
+        "tips": ["Keep stirring until the first boil, or the kadhi splits."],
+        "story": "Written in Masi's diary the week she got married, under the heading 'for Sunday lunch'.",
+        "language": "gu",
+        "uncertain_fields": []
+      }
+    },
+    {
+      "slug": "sukhdi",
+      "originPerson": "mom",
+      "source": "typed",
+      "audio": null,
+      "audioSeconds": null,
+      "scan": null,
+      "dishPhoto": "/sample/dishes/sukhdi.jpg",
+      "recipe": {
+        "title": "Mom's sukhdi",
+        "servings": 12,
+        "ingredients": [
+          {
+            "original_text": "1 cup ghau no lot",
+            "name": null,
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": null
+          },
+          {
+            "original_text": "1/2 cup ghee",
+            "name": null,
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": null
+          },
+          {
+            "original_text": "3/4 cup gol, chhinelo",
+            "name": null,
+            "suggested_quantity": null,
+            "suggested_unit": null,
+            "confidence": null,
+            "note": null
+          }
+        ],
+        "steps": [
+          { "text": "Roast the flour in ghee on low heat until it smells nutty." },
+          { "text": "Take it off the heat, stir in the grated jaggery until it melts." },
+          { "text": "Spread on a greased plate, cut into squares while warm." }
+        ],
+        "tips": [],
+        "story": "Made for every exam morning. Mom swears it is why I passed maths.",
+        "language": "en",
+        "uncertain_fields": []
+      }
+    }
+  ],
+  "lineage": [
+    {
+      "recipe": "methi-thepla",
+      "chain": ["ba", "mom", "you"],
+      "messages": [
+        "Take this to England with you. Make them for the children on Sundays.",
+        "Your Ba's thepla, for your first winter away from home."
+      ]
+    }
+  ],
+  "moments": [
+    {
+      "recipe": "methi-thepla",
+      "author": "mom",
+      "cookedOn": "2026-10-19",
+      "note": "First batch with Ba's methi from the garden.",
+      "rating": 5,
+      "photo": "/sample/moments/mom-thepla.jpg"
+    },
+    {
+      "recipe": "sukhdi",
+      "author": "you",
+      "cookedOn": "2026-11-02",
+      "note": "Less ghee this time. Still disappeared in a day.",
+      "rating": 4,
+      "photo": "/sample/moments/you-sukhdi.jpg"
+    }
+  ],
+  "pendingAssets": [
+    {
+      "path": "/sample/audio/ba-methi-thepla.m4a",
+      "description": "A real elder telling this recipe in Gujarati, about 4 minutes, recorded with written consent for public use"
+    },
+    {
+      "path": "/sample/scans/masi-kadhi.jpg",
+      "description": "A real handwritten Gujarati recipe page, with consent for public use"
+    },
+    {
+      "path": "/sample/people/ba.jpg",
+      "description": "Portrait (licensed stock or consenting family)"
+    },
+    {
+      "path": "/sample/people/mom.jpg",
+      "description": "Portrait (licensed stock or consenting family)"
+    },
+    {
+      "path": "/sample/people/masi.jpg",
+      "description": "Portrait (licensed stock or consenting family)"
+    },
+    { "path": "/sample/dishes/methi-thepla.jpg", "description": "Dish photo" },
+    { "path": "/sample/dishes/kadhi.jpg", "description": "Dish photo" },
+    { "path": "/sample/dishes/sukhdi.jpg", "description": "Dish photo" },
+    { "path": "/sample/moments/mom-thepla.jpg", "description": "Home cooking photo" },
+    { "path": "/sample/moments/you-sukhdi.jpg", "description": "Home cooking photo" }
+  ]
+}

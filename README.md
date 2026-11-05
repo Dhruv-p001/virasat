@@ -17,7 +17,7 @@ pnpm dev:inngest           # in a second terminal: runs the capture pipeline (se
 
 ### Signing in locally
 
-- **Email:** use `dhruv@example.test` (Shah family owner), `meena@example.test` (member) or `raj@example.test` (an unrelated family). Codes and links arrive in the local inbox at http://127.0.0.1:54324.
+- **Email:** use `dhruv@example.test` (Shah family owner), `meena@example.test` (member) or `raj@example.test` (an unrelated family). Codes and links arrive in the local inbox at http://127.0.0.1:55324.
 - **Phone:** use `+1 555 555 0100` or `+1 555 555 0101`. The code is always `123456` and no SMS is sent.
 - **New accounts:** any new email or test phone number creates an account and starts onboarding.
 

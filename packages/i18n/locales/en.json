@@ -166,7 +166,9 @@
     "email": "Enter a valid email address.",
     "country": "Choose a country from the list.",
     "generic": "Something went wrong. Please try again.",
-    "notAllowed": "You don't have permission to do that."
+    "notAllowed": "You don't have permission to do that.",
+    "rating": "Choose 1 to 5 stars.",
+    "date": "Choose a date that isn't in the future."
   },
   "common": {
     "cancel": "Cancel",
